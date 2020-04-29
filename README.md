@@ -2,6 +2,15 @@
 
 A typed, composable, web server framework totally ripped off [seanmonstar's warp](https://github.com/seanmonstar/warp)
 
+The fundamental building block of `pasrel` is the `Filter`: they can be combined and composed to express rich requirements on requests.
+
+Thanks to its `Filter` system, `pasrel` provides these out of the box:
+
+-   Path routing and parameter extraction
+-   Header requirements and extraction
+-   Query string deserialization
+-   JSON and Form bodies
+
 ## Example
 
 ```ts

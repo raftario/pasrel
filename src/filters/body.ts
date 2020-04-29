@@ -18,5 +18,5 @@ export const json: IntoFilter<[unknown]> = async (request) => {
     }
 };
 
-export const urlEncoded: IntoFilter<[ParsedUrlQuery]> = async (request) =>
+export const form: IntoFilter<[ParsedUrlQuery]> = async (request) =>
     [parseUrlEncoded(await streamToString(request))] as [ParsedUrlQuery];
