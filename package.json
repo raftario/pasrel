@@ -1,9 +1,9 @@
 {
-    "name": "gate",
+    "name": "pasrel",
     "version": "0.1.0",
     "main": "dist/lib.js",
     "author": "Raphaël Thériault <raphael_theriault@outlook.com>",
-    "description": "A super-easy, composable, web server framework totally ripped off seanmonstar's warp",
+    "description": "A typed, composable, web server framework totally ripped off seanmonstar's warp",
     "license": "MIT",
     "files": [
         "dist/*"
