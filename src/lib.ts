@@ -17,6 +17,8 @@ export function filter<T extends Tuple>(filter: IntoFilter<T>): Filter<T> {
     return new Filter(filter);
 }
 
+export const any: IntoFilter<[]> = [];
+
 export type Request = IncomingMessage;
 
 function _writeReply(reply: Reply, response: ServerResponse): void {
