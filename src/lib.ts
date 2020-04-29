@@ -84,21 +84,21 @@ export class Server {
     }
 }
 
-export function serve(filter: Filter<[Reply]>): Server;
+export function serve(filter: IntoFilter<[Reply]>): Server;
 export function serve(
-    filter: Filter<[Reply]>,
+    filter: IntoFilter<[Reply]>,
     options: HttpOptions | HttpsOptions
 ): Server;
-export function serve(filter: Filter<[Reply]>, w: With<[Reply]>): Server;
+export function serve(filter: IntoFilter<[Reply]>, w: With<[Reply]>): Server;
 export function serve(
-    filter: Filter<[Reply]>,
+    filter: IntoFilter<[Reply]>,
     options: HttpOptions | HttpsOptions,
     w: With<[Reply]>
 ): Server;
 export function serve(
-    filter: Filter<[Reply]>,
+    filter: IntoFilter<[Reply]>,
     arg1?: HttpOptions | HttpsOptions | With<[Reply]>,
     arg2?: With<[Reply]>
 ): Server {
-    return new Server(filter, arg1, arg2);
+    return new Server(new Filter(filter), arg1, arg2);
 }
