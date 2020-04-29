@@ -1,6 +1,6 @@
 import * as reply from "../reply";
 import { IntoFilter } from "../filter";
-import { Request } from "../lib";
+import { Request } from "..";
 import { withPriority } from "../error";
 
 async function _isMethod(request: Request, method: string): Promise<void> {

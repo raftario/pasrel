@@ -1,5 +1,5 @@
 import { ConcatMultiple } from "typescript-tuple";
-import { Request } from "./lib";
+import { Request } from "..";
 import { withPriority } from "./error";
 
 export type Tuple = unknown[] | [];

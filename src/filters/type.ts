@@ -1,6 +1,6 @@
 import * as reply from "../reply";
 import { IntoFilter } from "../filter";
-import { Request } from "../lib";
+import { Request } from "..";
 
 export interface ContentType {
     type: string;

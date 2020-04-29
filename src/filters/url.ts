@@ -1,5 +1,5 @@
 import { IntoFilter } from "../filter";
-import { Request } from "../lib";
+import { Request } from "..";
 
 export async function _urlFromRequest(request: Request): Promise<URL> {
     const url = request.url;

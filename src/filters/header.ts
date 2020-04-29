@@ -1,6 +1,6 @@
 import * as reply from "../reply";
 import { IntoFilter } from "../filter";
-import { Request } from "../lib";
+import { Request } from "..";
 
 function _find(header: string, request: Request): string | undefined {
     return request.headers[header]?.toString();
