@@ -17,9 +17,11 @@ export function asError(value: unknown, weight: number): Error {
     if (
         typeof value === "object" &&
         "error" in value! &&
-        (value as Error).error !== null
+        "weight" in value! &&
+        (value as Error).weight !== null &&
+        typeof (value as Error).weight === "number"
     ) {
-        return { ...(value as Error), weight };
+        return value as Error;
     } else {
         return {
             error: value,

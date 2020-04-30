@@ -4,61 +4,58 @@ import { Filter, FilterFn, Tuple, filter } from "../filter";
 import { _urlFromRequest } from "./url";
 import { any } from "..";
 
-export interface ExactPathSegment {
+export interface ExactSegment {
     _pathSegmentType: "exact";
     value: string;
 }
 
-export interface StringPathSegment {
+export interface StringSegment {
     _pathSegmentType: "string";
 }
-export interface NumberPathSegment {
+export interface NumberSegment {
     _pathSegmentType: "number";
 }
-export interface BooleanPathSegment {
+export interface BooleanSegment {
     _pathSegmentType: "boolean";
 }
 
-export type ExtractPathSegment =
-    | StringPathSegment
-    | NumberPathSegment
-    | BooleanPathSegment;
-export type PathSegment = ExactPathSegment | ExtractPathSegment;
+export type ExtractSegment = StringSegment | NumberSegment | BooleanSegment;
+export type Segment = ExactSegment | ExtractSegment;
 
-export function segment(segment: string): Filter<[ExactPathSegment]> {
+export function segment(segment: string): Filter<[ExactSegment]> {
     return filter([{ _pathSegmentType: "exact", value: segment }], 0);
 }
 
-export const string: Filter<[StringPathSegment]> = filter(
+export const string: Filter<[StringSegment]> = filter(
     [{ _pathSegmentType: "string" }],
     0
 );
-export const number: Filter<[NumberPathSegment]> = filter(
+export const number: Filter<[NumberSegment]> = filter(
     [{ _pathSegmentType: "number" }],
     0
 );
-export const boolean: Filter<[BooleanPathSegment]> = filter(
+export const boolean: Filter<[BooleanSegment]> = filter(
     [{ _pathSegmentType: "boolean" }],
     0
 );
 
-type EndFilter<A extends Tuple> = List.Filter<
+type End<A extends Tuple> = List.Filter<
     {
-        [I in keyof A]: A[I] extends StringPathSegment
+        [I in keyof A]: A[I] extends StringSegment
             ? string
-            : A[I] extends NumberPathSegment
+            : A[I] extends NumberSegment
             ? number
-            : A[I] extends BooleanPathSegment
+            : A[I] extends BooleanSegment
             ? boolean
             : A[I];
     },
-    ExactPathSegment
+    ExactSegment
 >;
 
 export async function end<T extends Tuple>(
     ...args: T
-): Promise<FilterFn<EndFilter<T>>> {
-    const segments: PathSegment[] = [];
+): Promise<FilterFn<End<T>>> {
+    const segments: Segment[] = [];
     const newArgs: unknown[] = [];
     for (const arg of args) {
         if (
@@ -67,12 +64,12 @@ export async function end<T extends Tuple>(
             typeof arg === "object" &&
             "_pathSegmentType" in arg!
         ) {
-            segments.push(arg as PathSegment);
+            segments.push(arg as Segment);
         } else {
             newArgs.push(arg);
         }
     }
-    return async (request): Promise<EndFilter<T>> => {
+    return async (request): Promise<End<T>> => {
         const urlSegments =
             (await _urlFromRequest(request)).pathname
                 .split("/")
@@ -108,31 +105,29 @@ export async function end<T extends Tuple>(
             }
         }
 
-        return (newArgs as unknown) as EndFilter<T>;
+        return (newArgs as unknown) as End<T>;
     };
 }
 
-type PathParam = string | typeof String | typeof Number | typeof Boolean;
-type PathParamSegment<A extends PathParam[]> = List.Filter<
+type Param = string | typeof String | typeof Number | typeof Boolean;
+type Params<A extends Param[]> = List.Filter<
     {
         [I in keyof A]: Any.Equals<A[I], string> extends true
             ? null
             : A[I] extends Class.Class
             ? string extends Class.InstanceOf<A[I]>
-                ? StringPathSegment
+                ? StringSegment
                 : number extends Class.InstanceOf<A[I]>
-                ? NumberPathSegment
+                ? NumberSegment
                 : boolean extends Class.InstanceOf<A[I]>
-                ? BooleanPathSegment
+                ? BooleanSegment
                 : never
-            : ExactPathSegment;
+            : ExactSegment;
     },
     null
 >;
 
-export function segments<T extends PathParam[]>(
-    ...args: T
-): Filter<PathParamSegment<T>> {
+export function segments<T extends Param[]>(...args: T): Filter<Params<T>> {
     let f: unknown = any;
     for (const arg of args) {
         if (typeof arg === "string") {
@@ -145,15 +140,13 @@ export function segments<T extends PathParam[]>(
             f = (f as Filter<[]>).and(boolean);
         }
     }
-    return f as Filter<PathParamSegment<T>>;
+    return f as Filter<Params<T>>;
 }
 
-export function path<T extends PathParam[]>(
-    ...args: T
-): Filter<EndFilter<PathParamSegment<T>>> {
+export function path<T extends Param[]>(...args: T): Filter<End<Params<T>>> {
     return (((segments(...args) as unknown) as Filter<[]>).map(
         end
-    ) as unknown) as Filter<EndFilter<PathParamSegment<T>>>;
+    ) as unknown) as Filter<End<Params<T>>>;
 }
 
 export const root: Filter<[]> = filter(async (request) => {

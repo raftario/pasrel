@@ -56,7 +56,7 @@ type ActualJson =
     | ActualJson[]
     | { [key: string]: ActualJson };
 
-async function extractJson(
+async function _extractJson(
     key: string,
     schema: JsonSchema,
     object: unknown
@@ -107,13 +107,13 @@ async function extractJson(
             } else if (schema.length === 1) {
                 const a: ActualJson[] = [];
                 for (const [i, o] of object.entries()) {
-                    a.push(await extractJson(i.toString(), schema[0], o));
+                    a.push(await _extractJson(i.toString(), schema[0], o));
                 }
                 return a;
             } else if (schema.length === object.length) {
                 const a: ActualJson[] = [];
                 for (const [i, s] of schema.entries()) {
-                    a.push(await extractJson(i.toString(), s, object[i]));
+                    a.push(await _extractJson(i.toString(), s, object[i]));
                 }
                 return a;
             } else {
@@ -130,13 +130,13 @@ async function extractJson(
         }
     } else if (typeof schema === "object") {
         if ("optional" in schema && schema.optional === true) {
-            return await extractJson(key, schema.type, object);
+            return await _extractJson(key, schema.type, object);
         }
 
         if (typeof object === "object") {
             const o: { [key: string]: ActualJson } = {};
             for (const k in schema) {
-                o[k] = await extractJson(
+                o[k] = await _extractJson(
                     k,
                     (schema as { [key: string]: JsonSchema })[k],
                     (object as { [key: string]: ActualJson })[k]
@@ -163,7 +163,7 @@ export function json<T extends RootJsonSchema>(schema: T): Filter<[Json<T>]> {
         } catch (error) {
             throw reply.text(`Invalid JSON body: ${error}`, 400);
         }
-        return [(await extractJson("root", schema, json)) as Json<T>];
+        return [(await _extractJson("root", schema, json)) as Json<T>];
     });
 }
 

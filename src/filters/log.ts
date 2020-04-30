@@ -1,6 +1,6 @@
-import { With, filter } from "./filter";
-import { Reply } from ".";
-import { _urlFromRequest } from "./filters/url";
+import { With, filter } from "../filter";
+import { Reply } from "..";
+import { _urlFromRequest } from "./url";
 
 export const logger: With<[Reply]> = async (f) =>
     filter(async (request) => {
