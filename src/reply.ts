@@ -1,11 +1,5 @@
 import { OutgoingHttpHeaders, STATUS_CODES } from "http";
-
-export interface Reply {
-    _: "reply";
-    status: number;
-    headers: OutgoingHttpHeaders;
-    body?: unknown;
-}
+import { Reply } from ".";
 
 export function raw(
     body: unknown,

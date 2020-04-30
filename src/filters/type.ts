@@ -1,5 +1,5 @@
 import * as reply from "../reply";
-import { IntoFilter } from "../filter";
+import { Filter, filter } from "../filter";
 import { Request } from "..";
 
 export interface ContentType {
@@ -88,9 +88,9 @@ function _matches(matcher: ContentType, matched: ContentType): boolean {
     return matcher.subtype === matched.subtype;
 }
 
-export function accepts(pattern: string): IntoFilter<[]> {
+export function accepts(pattern: string): Filter<[]> {
     const matched = _parsePattern(pattern);
-    return async (request): Promise<[]> => {
+    return filter(async (request) => {
         const accepted = await _parseAccept(request);
         for (const t of accepted) {
             if (_matches(t, matched)) {
@@ -98,12 +98,12 @@ export function accepts(pattern: string): IntoFilter<[]> {
             }
         }
         throw reply.status(406);
-    };
+    });
 }
 
-export function is(pattern: string): IntoFilter<[]> {
+export function is(pattern: string): Filter<[]> {
     const matcher = _parsePattern(pattern);
-    return async (request): Promise<[]> => {
+    return filter(async (request) => {
         const contentType = await _parseContentType(request);
         if (contentType === undefined) {
             throw reply.status(415);
@@ -112,5 +112,5 @@ export function is(pattern: string): IntoFilter<[]> {
             throw reply.status(415);
         }
         return [];
-    };
+    });
 }

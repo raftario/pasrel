@@ -1,12 +1,13 @@
-import { Filter, IntoFilter, Tuple } from "./filter";
-import { _urlFromRequest } from "./filters/url";
+import { With, filter } from "./filter";
+import { Reply } from ".";
 
-export function logger<T extends Tuple>(filter: Filter<T>): IntoFilter<T> {
-    return async (request): Promise<T> => {
+export const logger: With<[Reply]> = async (f) =>
+    filter(async (request) => {
         const startDate = new Date();
         const [startSecs, startNanos] = process.hrtime();
 
-        const result = await filter.run(request);
+        const reply = await f.run(request);
+        const status = reply[0].status;
         const [endSecs, endNanos] = process.hrtime();
 
         const elapsedSeconds = endSecs - startSecs;
@@ -14,15 +15,14 @@ export function logger<T extends Tuple>(filter: Filter<T>): IntoFilter<T> {
 
         const elapsedMicros = elapsedSeconds * 1000000 + elapsedNanos / 1000;
         const method = request.method || "?";
-        const path = (await _urlFromRequest(request)).pathname;
+        const path = request.url;
         const httpVersion = request.httpVersion;
 
         console.log(
-            `[${startDate.toISOString()}] ${method} ${path} HTTP/${httpVersion} (${elapsedMicros.toFixed(
+            `[${startDate.toISOString()}] ${method} ${path} HTTP/${httpVersion} => ${status} (${elapsedMicros.toFixed(
                 2
             )} us)`
         );
 
-        return result;
-    };
-}
+        return reply;
+    });

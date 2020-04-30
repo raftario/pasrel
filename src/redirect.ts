@@ -1,4 +1,4 @@
-import { Reply } from "./reply";
+import { Reply } from ".";
 
 export function temporary(url: string, status: 302 | 303 | 307 = 302): [Reply] {
     return [

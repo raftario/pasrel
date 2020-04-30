@@ -1,62 +1,61 @@
 import * as reply from "../reply";
-import { IntoFilter } from "../filter";
+import { Filter, filter } from "../filter";
 import { Request } from "..";
-import { withPriority } from "../error";
 
 async function _isMethod(request: Request, method: string): Promise<void> {
     if (request.method?.toUpperCase() !== method) {
-        throw withPriority(reply.status(405), 0.4);
+        throw reply.status(405);
     }
 }
 
-export const get: IntoFilter<[]> = async (request) => {
+export const get: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "GET");
     return [];
-};
+});
 
-export const head: IntoFilter<[]> = async (request) => {
+export const head: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "HEAD");
     return [];
-};
+});
 
-export const post: IntoFilter<[]> = async (request) => {
+export const post: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "POST");
     return [];
-};
+});
 
-export const put: IntoFilter<[]> = async (request) => {
+export const put: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "PUT");
     return [];
-};
+});
 
-export const del: IntoFilter<[]> = async (request) => {
+export const del: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "DELETE");
     return [];
-};
+});
 
-export const connect: IntoFilter<[]> = async (request) => {
+export const connect: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "CONNECT");
     return [];
-};
+});
 
-export const options: IntoFilter<[]> = async (request) => {
+export const options: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "OPTIONS");
     return [];
-};
+});
 
-export const trace: IntoFilter<[]> = async (request) => {
+export const trace: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "TRACE");
     return [];
-};
+});
 
-export const patch: IntoFilter<[]> = async (request) => {
+export const patch: Filter<[]> = filter(async (request) => {
     await _isMethod(request, "PATCH");
     return [];
-};
+});
 
-export function custom(method: string): IntoFilter<[]> {
-    return async (request): Promise<[]> => {
+export function custom(method: string): Filter<[]> {
+    return filter(async (request) => {
         await _isMethod(request, method.toUpperCase());
         return [];
-    };
+    });
 }

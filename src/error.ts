@@ -1,17 +1,34 @@
 import * as reply from "./reply";
-import { Recover } from "./filter";
-import { Reply } from "./reply";
+import { Recover, filter } from "./filter";
+import { Reply } from ".";
 
-interface WithPriority<T> {
+export interface Error<T = unknown> {
     error: T;
-    priority: number;
+    weight: number;
 }
 
-export function withPriority<T>(error: T, priority: number): WithPriority<T> {
-    return { error, priority };
+export function asError(value: unknown, weight: number): Error {
+    if (value === undefined || value === null) {
+        return {
+            error: "Error",
+            weight,
+        };
+    }
+    if (
+        typeof value === "object" &&
+        "error" in value! &&
+        (value as Error).error !== null
+    ) {
+        return { ...(value as Error), weight };
+    } else {
+        return {
+            error: value,
+            weight,
+        };
+    }
 }
 
-export function asReply(value?: unknown): Reply | null {
+export function asReply(value: unknown): Reply | null {
     if (value === undefined || value === null) {
         return null;
     }
@@ -26,19 +43,20 @@ export function asReply(value?: unknown): Reply | null {
         return asReply(value[0]);
     }
     if (typeof value === "object" && "error" in value!) {
-        return asReply((value as WithPriority<unknown>).error);
+        return asReply((value as Error).error);
     }
     return null;
 }
 
-export const recover: Recover<[Reply]> = async (error) => async (): Promise<
-    [Reply]
-> => {
-    const r = asReply(error);
-    if (r !== null) {
-        return [r];
-    } else {
-        console.error(error);
-        return reply.status(500);
-    }
-};
+export const recover: Recover<[Reply]> = async (error) =>
+    filter(
+        async (): Promise<[Reply]> => {
+            const r = asReply(error);
+            if (r !== null) {
+                return [r];
+            } else {
+                console.error(error);
+                return reply.status(500);
+            }
+        }
+    );

@@ -1,106 +1,94 @@
+import { Error, asError } from "./error";
 import { ConcatMultiple } from "typescript-tuple";
-import { Request } from "..";
-import { withPriority } from "./error";
+import { Request } from ".";
 
 export type Tuple = unknown[] | [];
 
-export type IntoFilter<T extends Tuple> =
-    | ((request: Request) => Promise<T>)
-    | T
-    | Filter<T>;
+export type Map<T extends Tuple, U extends Tuple> = (...args: T) => Promise<U>;
 
-export type Map<T extends Tuple, U extends Tuple> = (
-    ...args: T
-) => Promise<IntoFilter<U>>;
+export type Recover<T extends Tuple> = (error: Error) => Promise<Filter<T>>;
 
-export type Recover<T extends Tuple> = (
-    error: unknown
-) => Promise<IntoFilter<T>>;
+export type With<T extends Tuple> = (filter: Filter<T>) => Promise<Filter<T>>;
 
-export type With<T extends Tuple> = (filter: Filter<T>) => IntoFilter<T>;
+export type FilterFn<T extends Tuple> = (request: Request) => Promise<T>;
 
 export class Filter<T extends Tuple> {
+    readonly weight: number;
     readonly run: (request: Request) => Promise<T>;
 
-    constructor(filter: IntoFilter<T>) {
-        if (typeof filter === "function") {
-            this.run = filter;
-        } else if (filter instanceof Array) {
-            this.run = (): Promise<T> => Promise.resolve(filter);
-        } else if (filter instanceof Filter) {
-            this.run = filter.run;
+    constructor(f: FilterFn<T> | T, weight: number) {
+        this.weight = weight;
+        if (typeof f === "function") {
+            this.run = async (request): Promise<T> => {
+                try {
+                    return await f(request);
+                } catch (err) {
+                    throw asError(err, this.weight);
+                }
+            };
+        } else if (f instanceof Array) {
+            this.run = async (): Promise<T> => f;
         } else {
             throw new Error("Unhandled type");
         }
     }
 
-    and<U extends Tuple>(
-        filter: IntoFilter<U>
-    ): Filter<ConcatMultiple<[T, U]>> {
-        return new Filter((request: Request) =>
-            this.run(request).then((argsT: T) =>
-                new Filter(filter)
-                    .run(request)
-                    .then((argsU: U) =>
-                        Promise.resolve([...argsT, ...argsU] as ConcatMultiple<
-                            [T, U]
-                        >)
-                    )
-            )
-        );
+    and<U extends Tuple>(f: Filter<U>): Filter<ConcatMultiple<[T, U]>> {
+        return new Filter(async (request) => {
+            const t = await this.run(request);
+            const u = await f.run(request);
+            return [...t, ...u] as ConcatMultiple<[T, U]>;
+        }, this.weight + f.weight);
     }
 
-    or(filter: IntoFilter<T>): Filter<T> {
-        return new Filter((request: Request) =>
-            this.run(request).catch(async (e1) => {
+    or(f: Filter<T>): Filter<T> {
+        return new Filter(async (request) => {
+            try {
+                return await this.run(request);
+            } catch (e1) {
                 try {
-                    return await new Filter(filter).run(request);
+                    return await f.run(request);
                 } catch (e2) {
-                    const p1: number =
-                        e1.priority !== undefined &&
-                        e1.priority !== null &&
-                        typeof e1.priority === "number"
-                            ? e1.priority
-                            : 1;
-                    const p2: number =
-                        e2.priority !== undefined &&
-                        e2.priority !== null &&
-                        typeof e2.priority === "number"
-                            ? e2.priority
-                            : 1;
-                    throw p1 > p2 ? e1 : e2;
+                    throw e1.weight > e2.weight ? e1 : e2;
                 }
-            })
-        );
+            }
+        }, Math.max(this.weight, f.weight));
     }
 
     map<U extends Tuple>(fn: Map<T, U>): Filter<U> {
-        return new Filter((request: Request) =>
-            this.run(request)
-                .then((argsT: T) => fn(...argsT))
-                .then((f) => new Filter(f).run(request))
-        );
+        return new Filter(async (request) => {
+            const args = await this.run(request);
+            return await fn(...args);
+        }, this.weight + 1);
     }
 
     recover(fn: Recover<T>): Filter<T> {
-        return new Filter((request: Request) =>
-            this.run(request)
-                .catch((error) => fn(error))
-                .then((f) => new Filter(f).run(request))
-        );
+        return new Filter(async (request) => {
+            try {
+                return await this.run(request);
+            } catch (err) {
+                const f = await fn(err);
+                return await f.run(request);
+            }
+        }, this.weight);
     }
 
     with(fn: With<T>): Filter<T> {
-        return new Filter((request: Request) =>
-            new Filter(fn(this)).run(request)
-        );
+        return new Filter(async (request) => {
+            const f = await fn(this);
+            return await f.run(request);
+        }, this.weight);
     }
+}
 
-    priority(priority: number): Filter<T> {
-        return new Filter((request: Request) =>
-            this.run(request).catch(async (error) => {
-                throw withPriority(error, priority);
-            })
-        );
-    }
+export function filter<T extends Tuple>(
+    fn: FilterFn<T>,
+    weight?: number
+): Filter<T>;
+export function filter<T extends Tuple>(value: T, weight?: number): Filter<T>;
+export function filter<T extends Tuple>(
+    arg: FilterFn<T> | T,
+    weight = 1
+): Filter<T> {
+    return new Filter(arg, weight);
 }

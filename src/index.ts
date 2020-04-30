@@ -1,8 +1,9 @@
-import { Filter, IntoFilter, Tuple, With } from "./filter";
+import { Filter, With, filter } from "./filter";
 import {
     ServerOptions as HttpOptions,
     Server as HttpServer,
     IncomingMessage,
+    OutgoingHttpHeaders,
     ServerResponse,
     createServer as createHttpServer,
 } from "http";
@@ -10,16 +11,18 @@ import {
     ServerOptions as HttpsOptions,
     createServer as createHttpsServer,
 } from "https";
-import { Reply } from "./reply";
 import { recover } from "./error";
-
-export function filter<T extends Tuple>(filter: IntoFilter<T>): Filter<T> {
-    return new Filter(filter);
-}
 
 export type Request = IncomingMessage;
 
-function _writeReply(reply: Reply, response: ServerResponse): void {
+export interface Reply {
+    _: "reply";
+    status: number;
+    headers: OutgoingHttpHeaders;
+    body?: unknown;
+}
+
+export function writeReply(reply: Reply, response: ServerResponse): void {
     response.statusCode = reply.status;
     for (const [name, value] of Object.entries(reply.headers)) {
         if (value !== undefined) {
@@ -30,7 +33,7 @@ function _writeReply(reply: Reply, response: ServerResponse): void {
 }
 
 export class Server {
-    private readonly _server: HttpServer;
+    readonly inner: HttpServer;
 
     constructor(
         filter: Filter<[Reply]>,
@@ -50,9 +53,9 @@ export class Server {
         }
 
         if ("cert" in options && "key" in options) {
-            this._server = createHttpsServer(options);
+            this.inner = createHttpsServer(options);
         } else {
-            this._server = createHttpServer(options);
+            this.inner = createHttpServer(options);
         }
 
         filter = filter.recover(recover);
@@ -60,12 +63,12 @@ export class Server {
             filter = filter.with(w);
         }
 
-        this._server.on(
+        this.inner.on(
             "request",
             (request: IncomingMessage, response: ServerResponse) => {
                 filter
                     .run(request)
-                    .then(([reply]) => _writeReply(reply, response))
+                    .then(([reply]) => writeReply(reply, response))
                     .catch((error) => {
                         console.error(error);
                         process.exit(1);
@@ -76,29 +79,31 @@ export class Server {
 
     run(port: number, hostName?: string): Promise<void> {
         return new Promise((res) => {
-            this._server.on("listening", () => {
+            this.inner.on("listening", () => {
                 res();
             });
-            this._server.listen(port, hostName);
+            this.inner.listen(port, hostName);
         });
     }
 }
 
-export function serve(filter: IntoFilter<[Reply]>): Server;
+export function serve(f: Filter<[Reply]>): Server;
 export function serve(
-    filter: IntoFilter<[Reply]>,
+    f: Filter<[Reply]>,
     options: HttpOptions | HttpsOptions
 ): Server;
-export function serve(filter: IntoFilter<[Reply]>, w: With<[Reply]>): Server;
+export function serve(filter: Filter<[Reply]>, w: With<[Reply]>): Server;
 export function serve(
-    filter: IntoFilter<[Reply]>,
+    f: Filter<[Reply]>,
     options: HttpOptions | HttpsOptions,
     w: With<[Reply]>
 ): Server;
 export function serve(
-    filter: IntoFilter<[Reply]>,
+    f: Filter<[Reply]>,
     arg1?: HttpOptions | HttpsOptions | With<[Reply]>,
     arg2?: With<[Reply]>
 ): Server {
-    return new Server(new Filter(filter), arg1, arg2);
+    return new Server(f, arg1, arg2);
 }
+
+export const any: Filter<[]> = filter([]);

@@ -1,4 +1,4 @@
-import { IntoFilter } from "../filter";
+import { Filter, filter } from "../filter";
 import { Request } from "..";
 
 export async function _urlFromRequest(request: Request): Promise<URL> {
@@ -9,6 +9,6 @@ export async function _urlFromRequest(request: Request): Promise<URL> {
     return new URL(url, `http://${request.headers.host}`);
 }
 
-export const url: IntoFilter<[URL]> = async (request): Promise<[URL]> => [
+export const url: Filter<[URL]> = filter(async (request) => [
     await _urlFromRequest(request),
-];
+]);
