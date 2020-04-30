@@ -2,6 +2,7 @@
     "name": "pasrel",
     "version": "0.1.0",
     "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "author": "Raphaël Thériault <raphael_theriault@outlook.com>",
     "description": "A typed, composable, web server framework totally ripped off seanmonstar's warp",
     "license": "MIT",
@@ -16,15 +17,15 @@
     },
     "scripts": {
         "build": "tsc",
-        "lint": "eslint --fix src/**/*.ts && prettier --write **/*.json",
-        "prepublishOnly": "tsc"
+        "lint": "eslint --fix src/**/*.ts && prettier --write **/*.{json,md}",
+        "prepublishOnly": "yarn lint && yarn build"
     },
     "dependencies": {
+        "@types/node": "^13.13.4",
         "get-stream": "^5.1.0",
         "ts-toolbelt": "^6.5.1"
     },
     "devDependencies": {
-        "@types/node": "^12.12.37",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "@typescript-eslint/parser": "^2.30.0",
         "eslint": "^6.8.0",
