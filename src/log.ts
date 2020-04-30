@@ -1,5 +1,6 @@
 import { With, filter } from "./filter";
 import { Reply } from ".";
+import { _urlFromRequest } from "./filters/url";
 
 export const logger: With<[Reply]> = async (f) =>
     filter(async (request) => {
@@ -15,7 +16,7 @@ export const logger: With<[Reply]> = async (f) =>
 
         const elapsedMicros = elapsedSeconds * 1000000 + elapsedNanos / 1000;
         const method = request.method || "?";
-        const path = request.url;
+        const path = (await _urlFromRequest(request)).pathname;
         const httpVersion = request.httpVersion;
 
         console.log(

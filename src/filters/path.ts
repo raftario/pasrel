@@ -1,6 +1,7 @@
 import * as reply from "../reply";
 import { Any, Class, List, T } from "ts-toolbelt";
 import { Filter, FilterFn, Tuple, filter } from "../filter";
+import { _urlFromRequest } from "./url";
 import { any } from "..";
 
 export interface ExactPathSegment {
@@ -73,7 +74,9 @@ export async function end<T extends Tuple>(
     }
     return async (request): Promise<EndFilter<T>> => {
         const urlSegments =
-            request.url?.split("/").filter((s) => s !== "") || [];
+            (await _urlFromRequest(request)).pathname
+                .split("/")
+                .filter((s) => s !== "") || [];
 
         if (segments.length !== urlSegments.length) {
             throw reply.status(404);
@@ -154,7 +157,7 @@ export function path<T extends PathParam[]>(
 }
 
 export const root: Filter<[]> = filter(async (request) => {
-    const path = request.url || "";
+    const path = (await _urlFromRequest(request)).pathname;
     if (path.length === 0 || path === "/") {
         return [];
     } else {

@@ -43,7 +43,7 @@ export class Filter<T extends Tuple> {
                 try {
                     return await f.run(request);
                 } catch (e2) {
-                    throw e1.weight > e2.weight ? e1 : e2;
+                    throw e1.weight >= e2.weight ? e1 : e2;
                 }
             }
         }, Math.max(this.weight, f.weight));
