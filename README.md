@@ -10,8 +10,8 @@ import * as reply from "pasrel/reply";
 import { serve } from "pasrel";
 
 const hello = path
-    .params("/hello/:name")
-    .map(async (params) => reply.text(`Hello, ${params.name}!`));
+    .path("hello", String)
+    .map(async (name) => reply.text(`Hello, ${name}!`));
 
 serve(hello).run(3030).catch(console.error);
 ```

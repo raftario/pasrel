@@ -1,14 +1,8 @@
 import { Error, asError } from "./error";
-import { ConcatMultiple } from "typescript-tuple";
+import { List } from "ts-toolbelt";
 import { Request } from ".";
 
-export type Tuple = unknown[] | [];
-
-export type Map<T extends Tuple, U extends Tuple> = (...args: T) => Promise<U>;
-
-export type Recover<T extends Tuple> = (error: Error) => Promise<Filter<T>>;
-
-export type With<T extends Tuple> = (filter: Filter<T>) => Promise<Filter<T>>;
+export type Tuple = readonly unknown[];
 
 export type FilterFn<T extends Tuple> = (request: Request) => Promise<T>;
 
@@ -33,11 +27,11 @@ export class Filter<T extends Tuple> {
         }
     }
 
-    and<U extends Tuple>(f: Filter<U>): Filter<ConcatMultiple<[T, U]>> {
+    and<U extends Tuple>(f: Filter<U>): Filter<List.Concat<T, U>> {
         return new Filter(async (request) => {
             const t = await this.run(request);
             const u = await f.run(request);
-            return [...t, ...u] as ConcatMultiple<[T, U]>;
+            return ([...t, ...u] as unknown) as List.Concat<T, U>;
         }, this.weight + f.weight);
     }
 
@@ -58,7 +52,12 @@ export class Filter<T extends Tuple> {
     map<U extends Tuple>(fn: Map<T, U>): Filter<U> {
         return new Filter(async (request) => {
             const args = await this.run(request);
-            return await fn(...args);
+            const f = await fn(...args);
+            if (typeof f === "function") {
+                return await f(request);
+            } else {
+                return f;
+            }
         }, this.weight + 1);
     }
 
@@ -80,6 +79,14 @@ export class Filter<T extends Tuple> {
         }, this.weight);
     }
 }
+
+export type Map<T extends Tuple, U extends Tuple> = (
+    ...args: T
+) => Promise<FilterFn<U> | U>;
+
+export type Recover<T extends Tuple> = (error: Error) => Promise<Filter<T>>;
+
+export type With<T extends Tuple> = (filter: Filter<T>) => Promise<Filter<T>>;
 
 export function filter<T extends Tuple>(
     fn: FilterFn<T>,

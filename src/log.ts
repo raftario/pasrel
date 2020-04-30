@@ -19,7 +19,7 @@ export const logger: With<[Reply]> = async (f) =>
         const httpVersion = request.httpVersion;
 
         console.log(
-            `[${startDate.toISOString()}] ${method} ${path} HTTP/${httpVersion} => ${status} (${elapsedMicros.toFixed(
+            `[${startDate.toISOString()}] ${method} ${path} (HTTP/${httpVersion}) => ${status} (${elapsedMicros.toFixed(
                 2
             )} us)`
         );
