@@ -3,6 +3,9 @@ import { List } from "ts-toolbelt";
 import { Request } from ".";
 
 export type Tuple = readonly unknown[];
+export type Concat<T extends Tuple, U extends Tuple> = List.Concat<T, U>;
+
+type Finite<T extends Tuple> = number extends T["length"] ? never : T;
 
 export type FilterFn<T extends Tuple> = (request: Request) => Promise<T>;
 
@@ -27,11 +30,11 @@ export class Filter<T extends Tuple> {
         }
     }
 
-    and<U extends Tuple>(f: Filter<U>): Filter<List.Concat<T, U>> {
+    and<U extends Tuple>(f: Filter<U>): Filter<Concat<T, U>> {
         return new Filter(async (request) => {
             const t = await this.run(request);
             const u = await f.run(request);
-            return ([...t, ...u] as unknown) as List.Concat<T, U>;
+            return ([...t, ...u] as unknown) as Concat<T, U>;
         }, this.weight + f.weight);
     }
 
@@ -91,11 +94,14 @@ export type With<T extends Tuple> = (filter: Filter<T>) => Promise<Filter<T>>;
 export function filter<T extends Tuple>(
     fn: FilterFn<T>,
     weight?: number
-): Filter<T>;
-export function filter<T extends Tuple>(value: T, weight?: number): Filter<T>;
+): Filter<Finite<T>>;
+export function filter<T extends Tuple>(
+    value: T,
+    weight?: number
+): Filter<Finite<T>>;
 export function filter<T extends Tuple>(
     arg: FilterFn<T> | T,
     weight = 1
-): Filter<T> {
-    return new Filter(arg, weight);
+): Filter<Finite<T>> {
+    return new Filter(arg, weight) as Filter<Finite<T>>;
 }
