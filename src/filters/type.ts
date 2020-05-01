@@ -7,6 +7,7 @@ export interface ContentType {
     subtype: string;
 }
 
+/** @internal */
 async function _parseAccept(request: Request): Promise<ContentType[]> {
     const types: ContentType[] = [];
 
@@ -36,6 +37,7 @@ async function _parseAccept(request: Request): Promise<ContentType[]> {
     return types;
 }
 
+/** @internal */
 async function _parseContentType(
     request: Request
 ): Promise<ContentType | undefined> {
@@ -61,6 +63,7 @@ async function _parseContentType(
     return undefined;
 }
 
+/** @internal */
 function _parsePattern(pattern: string): ContentType {
     const typeAndSubtype = pattern.split("/");
     if (typeAndSubtype.length === 1) {
@@ -75,6 +78,7 @@ function _parsePattern(pattern: string): ContentType {
     }
 }
 
+/** @internal */
 function _matches(matcher: ContentType, matched: ContentType): boolean {
     if (matcher.type === "*") {
         return true;

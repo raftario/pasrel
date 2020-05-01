@@ -5,10 +5,12 @@ import { Filter, filter } from "../filter";
 import { Reply } from "..";
 import { getType } from "mime";
 
+/** @internal */
 function _exists(path: string): Promise<boolean> {
     return new Promise((res) => fs.exists(path, (e) => res(e)));
 }
 
+/** @internal */
 async function _readToReply(path: string, index: boolean): Promise<[Reply]> {
     if (!(await _exists(path))) {
         if (index) {

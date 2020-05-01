@@ -1,6 +1,7 @@
 import { Filter, filter } from "../filter";
 import { Request } from "..";
 
+/** @internal */
 export async function _urlFromRequest(request: Request): Promise<URL> {
     const url = request.url;
     if (url === undefined) {

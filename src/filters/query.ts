@@ -35,6 +35,7 @@ type Query<S extends QuerySchema> = {
         : never;
 };
 
+/** @internal */
 async function _extractQuery(
     key: string,
     type: typeof String | typeof Number,

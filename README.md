@@ -13,5 +13,5 @@ const hello = path
     .path("hello", String)
     .map(async (name) => reply.text(`Hello, ${name}!`));
 
-serve(hello).run(3030);
+serve(hello).run(3030).catch(console.error);
 ```

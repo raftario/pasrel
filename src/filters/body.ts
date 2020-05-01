@@ -49,6 +49,7 @@ type Json<S extends RootJsonSchema> = {
         : never;
 };
 
+/** @internal */
 type ActualJson =
     | string
     | number
@@ -57,6 +58,7 @@ type ActualJson =
     | ActualJson[]
     | { [key: string]: ActualJson };
 
+/** @internal */
 async function _extractJson(
     key: string,
     schema: JsonSchema,

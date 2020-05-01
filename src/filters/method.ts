@@ -2,6 +2,7 @@ import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 import { Request } from "..";
 
+/** @internal */
 async function _isMethod(request: Request, method: string): Promise<void> {
     if (request.method?.toUpperCase() !== method) {
         throw reply.status(405);
