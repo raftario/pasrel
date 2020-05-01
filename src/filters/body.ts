@@ -82,11 +82,13 @@ type ActualJson =
 
 /** @internal */
 async function _extractJson(
-    key: string,
+    keys: string[],
     schema: JsonSchema,
     object: unknown,
     extra: boolean
 ): Promise<ActualJson> {
+    const key = keys.join(".");
+
     if (object === undefined || object === null) {
         if (
             typeof schema === "object" &&
@@ -133,7 +135,12 @@ async function _extractJson(
                 const a: ActualJson[] = [];
                 for (const [i, o] of object.entries()) {
                     a.push(
-                        await _extractJson(i.toString(), schema[0], o, extra)
+                        await _extractJson(
+                            [...keys, i.toString()],
+                            schema[0],
+                            o,
+                            extra
+                        )
                     );
                 }
                 return a;
@@ -141,7 +148,12 @@ async function _extractJson(
                 const a: ActualJson[] = [];
                 for (const [i, s] of schema.entries()) {
                     a.push(
-                        await _extractJson(i.toString(), s, object[i], extra)
+                        await _extractJson(
+                            [...keys, i.toString()],
+                            s,
+                            object[i],
+                            extra
+                        )
                     );
                 }
                 return a;
@@ -159,7 +171,7 @@ async function _extractJson(
         }
     } else if (typeof schema === "object") {
         if (schema.optional === true) {
-            return await _extractJson(key, schema.type, object, extra);
+            return await _extractJson(keys, schema.type, object, extra);
         }
 
         if (typeof object === "object") {
@@ -168,7 +180,7 @@ async function _extractJson(
                 : {};
             for (const k in schema) {
                 o[k] = await _extractJson(
-                    k,
+                    [...keys, k],
                     (schema as { [key: string]: JsonSchema })[k],
                     (object as { [key: string]: ActualJson })[k],
                     extra
@@ -216,7 +228,7 @@ export function json<T extends RootJsonSchema>(
         } catch (error) {
             throw reply.text(`Invalid JSON body: ${error}`, 400);
         }
-        return [(await _extractJson("root", schema, json, extra)) as Json<T>];
+        return [(await _extractJson([], schema, json, extra)) as Json<T>];
     });
 }
 
