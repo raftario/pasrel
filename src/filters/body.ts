@@ -2,6 +2,7 @@ import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 import { ParsedUrlQuery, parse as parseUrlEncoded } from "querystring";
 import streamToString, { buffer as streamToBuffer } from "get-stream";
+import Busboy from "busboy";
 import { Class } from "ts-toolbelt";
 
 export const raw: Filter<[Buffer]> = filter(async (request) => [
@@ -179,3 +180,70 @@ export const anyJson: Filter<[unknown]> = filter(async (request) => {
 export const form: Filter<[ParsedUrlQuery]> = filter(async (request) => [
     parseUrlEncoded(await streamToString(request)),
 ]);
+
+export interface FormDataFile {
+    data: Buffer;
+    filename: string;
+    encoding: string;
+    mime: string;
+}
+export interface FormDataField {
+    value: string;
+    encoding: string;
+    mime: string;
+}
+export interface FormData {
+    files: { [key: string]: FormDataFile };
+    fields: { [key: string]: FormDataField };
+}
+
+export const multipart: Filter<[FormData]> = filter(
+    (request) =>
+        new Promise((res, rej) => {
+            if (
+                !request.headers["content-type"]
+                    ?.toLowerCase()
+                    .startsWith("multipart/form-data")
+            ) {
+                rej(reply.text("Expected multipart body", 400));
+            }
+
+            const result: FormData = { files: {}, fields: {} };
+            request.on("error", (err) => rej(err));
+
+            try {
+                const busboy = new Busboy({
+                    headers: request.headers,
+                });
+
+                busboy.on("file", (fieldname, file, filename, encoding, mime) =>
+                    streamToBuffer(file)
+                        .then((data) => {
+                            result.files[fieldname] = {
+                                data,
+                                filename,
+                                encoding,
+                                mime,
+                            };
+                        })
+                        .catch((err) => rej(err))
+                );
+                busboy.on(
+                    "field",
+                    (
+                        fieldname,
+                        value,
+                        truncatedFieldname,
+                        trucatedValue,
+                        encoding,
+                        mime
+                    ) => (result.fields[fieldname] = { value, encoding, mime })
+                );
+
+                busboy.on("finish", () => res([result]));
+                request.pipe(busboy);
+            } catch (err) {
+                rej(reply.text("Invalid multipart body", 400));
+            }
+        })
+);

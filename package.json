@@ -22,10 +22,12 @@
     },
     "dependencies": {
         "@types/node": "^13.13.4",
+        "busboy": "^0.3.1",
         "get-stream": "^5.1.0",
         "ts-toolbelt": "^6.5.1"
     },
     "devDependencies": {
+        "@types/busboy": "^0.2.3",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "@typescript-eslint/parser": "^2.30.0",
         "eslint": "^6.8.0",
