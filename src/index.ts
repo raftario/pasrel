@@ -13,7 +13,9 @@ import {
 } from "https";
 import { recover } from "./error";
 
-export type Request = IncomingMessage;
+export interface Request extends IncomingMessage {
+    pathSegments: string[];
+}
 
 export interface Reply {
     _: "reply";
@@ -66,9 +68,17 @@ export class Server {
         this.inner.on(
             "request",
             (request: IncomingMessage, response: ServerResponse) => {
+                const pRequest: Request = request as Request;
+                pRequest.pathSegments = new URL(
+                    request.url || "",
+                    `http://${request.headers.host}`
+                ).pathname
+                    .split("/")
+                    .filter((s) => s !== "");
+
                 filter
-                    .run(request)
-                    .then(([reply]) => writeReply(reply, response))
+                    .run(pRequest, 0)
+                    .then(({ tuple: [reply] }) => writeReply(reply, response))
                     .catch((error) => {
                         console.error(error);
                         process.exit(1);

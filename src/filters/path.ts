@@ -1,159 +1,91 @@
 import * as reply from "../reply";
-import { Any, Class, List, T } from "ts-toolbelt";
-import { Filter, FilterFn, Tuple, filter } from "../filter";
-import { _urlFromRequest } from "./url";
+import { Class, List } from "ts-toolbelt";
+import { Filter, Finite } from "../filter";
 import { any } from "..";
 
-export interface ExactSegment {
-    _pathSegmentType: "exact";
-    value: string;
-}
-
-export interface StringSegment {
-    _pathSegmentType: "string";
-}
-export interface NumberSegment {
-    _pathSegmentType: "number";
-}
-export interface BooleanSegment {
-    _pathSegmentType: "boolean";
-}
-
-export type ExtractSegment = StringSegment | NumberSegment | BooleanSegment;
-export type Segment = ExactSegment | ExtractSegment;
-
-export function segment(segment: string): Filter<[ExactSegment]> {
-    return filter([{ _pathSegmentType: "exact", value: segment }], 0);
-}
-
-export const string: Filter<[StringSegment]> = filter(
-    [{ _pathSegmentType: "string" }],
-    0
-);
-export const number: Filter<[NumberSegment]> = filter(
-    [{ _pathSegmentType: "number" }],
-    0
-);
-export const boolean: Filter<[BooleanSegment]> = filter(
-    [{ _pathSegmentType: "boolean" }],
-    0
-);
-
-type End<A extends Tuple> = List.Filter<
-    {
-        [I in keyof A]: A[I] extends StringSegment
-            ? string
-            : A[I] extends NumberSegment
-            ? number
-            : A[I] extends BooleanSegment
-            ? boolean
-            : A[I];
-    },
-    ExactSegment
->;
-
-export async function end<T extends Tuple>(
-    ...args: T
-): Promise<FilterFn<End<T>>> {
-    const segments: Segment[] = [];
-    const newArgs: unknown[] = [];
-    for (const arg of args) {
-        if (
-            arg !== undefined &&
-            arg !== null &&
-            typeof arg === "object" &&
-            "_pathSegmentType" in arg!
-        ) {
-            segments.push(arg as Segment);
-        } else {
-            newArgs.push(arg);
-        }
-    }
-    return async (request): Promise<End<T>> => {
-        const urlSegments =
-            (await _urlFromRequest(request)).pathname
-                .split("/")
-                .filter((s) => s !== "") || [];
-
-        if (segments.length !== urlSegments.length) {
+export function segment(literal: string): Filter<[]> {
+    return new Filter(async (request, depth) => {
+        if (depth >= request.pathSegments.length) {
             throw reply.status(404);
         }
-
-        for (const [i, segment] of segments.entries()) {
-            if (segment._pathSegmentType === "exact") {
-                if (segment.value !== urlSegments[i]) {
-                    throw reply.status(404);
-                }
-            } else if (segment._pathSegmentType === "string") {
-                newArgs.push(urlSegments[i]);
-            } else if (segment._pathSegmentType === "number") {
-                const n = Number(urlSegments[i]);
-                if (isNaN(n)) {
-                    throw reply.status(404);
-                } else {
-                    newArgs.push(n);
-                }
-            } else if (segment._pathSegmentType === "boolean") {
-                const b = urlSegments[i].toLowerCase();
-                if (b === "true") {
-                    newArgs.push(true);
-                } else if (b === "false") {
-                    newArgs.push(false);
-                } else {
-                    throw reply.status(404);
-                }
-            }
+        if (request.pathSegments[depth] !== literal) {
+            throw reply.status(404);
         }
-
-        return (newArgs as unknown) as End<T>;
-    };
+        return { tuple: [], depth: depth + 1 };
+    }, 0);
 }
 
-type Param = string | typeof String | typeof Number | typeof Boolean;
-type Params<A extends Param[]> = List.Filter<
+export const string: Filter<[string]> = new Filter(async (request, depth) => {
+    if (depth >= request.pathSegments.length) {
+        throw reply.status(404);
+    }
+    return { tuple: [request.pathSegments[depth]], depth: depth + 1 };
+}, 0);
+export const number: Filter<[number]> = new Filter(async (request, depth) => {
+    if (depth >= request.pathSegments.length) {
+        throw reply.status(404);
+    }
+    const n = Number(request.pathSegments[depth]);
+    if (isNaN(n)) {
+        throw reply.status(404);
+    }
+    return { tuple: [n], depth: depth + 1 };
+}, 0);
+export const boolean: Filter<[boolean]> = new Filter(async (request, depth) => {
+    if (depth >= request.pathSegments.length) {
+        throw reply.status(404);
+    }
+    if (request.pathSegments[depth] === "true") {
+        return { tuple: [true as boolean], depth: depth + 1 };
+    } else if (request.pathSegments[depth] === "false") {
+        return { tuple: [false as boolean], depth: depth + 1 };
+    } else {
+        throw reply.status(404);
+    }
+}, 0);
+
+export const end: Filter<[]> = new Filter(async (request, depth) => {
+    if (depth == request.pathSegments.length) {
+        return { tuple: [], depth };
+    } else {
+        throw reply.status(404);
+    }
+}, 1);
+
+type PathSegment = string | typeof String | typeof Number | typeof Boolean;
+type Path<S extends PathSegment[]> = List.Filter<
     {
-        [I in keyof A]: Any.Equals<A[I], string> extends true
-            ? null
-            : A[I] extends Class.Class
-            ? string extends Class.InstanceOf<A[I]>
-                ? StringSegment
-                : number extends Class.InstanceOf<A[I]>
-                ? NumberSegment
-                : boolean extends Class.InstanceOf<A[I]>
-                ? BooleanSegment
+        [I in keyof S]: S[I] extends Class.Class
+            ? string extends Class.InstanceOf<S[I]>
+                ? string
+                : number extends Class.InstanceOf<S[I]>
+                ? number
+                : boolean extends Class.InstanceOf<S[I]>
+                ? boolean
                 : never
-            : ExactSegment;
+            : null;
     },
     null
 >;
 
-export function segments<T extends Param[]>(...args: T): Filter<Params<T>> {
-    let f: unknown = any;
-    for (const arg of args) {
-        if (typeof arg === "string") {
-            f = (f as Filter<[]>).and(segment(arg));
-        } else if (arg === String) {
-            f = (f as Filter<[]>).and(string);
-        } else if (arg === Number) {
-            f = (f as Filter<[]>).and(number);
-        } else if (arg === Boolean) {
-            f = (f as Filter<[]>).and(boolean);
+export function path<S extends PathSegment[]>(
+    ...segments: S
+): Filter<Finite<Path<S>>> {
+    if (segment.length === 0) {
+        return (end as unknown) as Filter<Finite<Path<S>>>;
+    }
+
+    let f: Filter<unknown[]> = any;
+    for (const s of segments) {
+        if (s === String) {
+            f = f.and(string);
+        } else if (s === Number) {
+            f = f.and(number);
+        } else if (s === Boolean) {
+            f = f.and(boolean);
+        } else {
+            f = f.and(segment(s as string));
         }
     }
-    return f as Filter<Params<T>>;
+    return (f.and(end) as unknown) as Filter<Finite<Path<S>>>;
 }
-
-export function path<T extends Param[]>(...args: T): Filter<End<Params<T>>> {
-    return (((segments(...args) as unknown) as Filter<[]>).map(
-        end
-    ) as unknown) as Filter<End<Params<T>>>;
-}
-
-export const root: Filter<[]> = filter(async (request) => {
-    const path = (await _urlFromRequest(request)).pathname;
-    if (path.length === 0 || path === "/") {
-        return [];
-    } else {
-        throw reply.status(404);
-    }
-});

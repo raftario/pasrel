@@ -1,14 +1,14 @@
-import { With, filter } from "../filter";
+import { Filter, With } from "../filter";
 import { Reply } from "..";
 import { _urlFromRequest } from "./url";
 
 export const logger: With<[Reply]> = async (f) =>
-    filter(async (request) => {
+    new Filter(async (request, depth) => {
         const startDate = new Date();
         const [startSecs, startNanos] = process.hrtime();
 
-        const reply = await f.run(request);
-        const status = reply[0].status;
+        const reply = (await f.run(request, depth)).tuple[0];
+        const status = reply.status;
         const [endSecs, endNanos] = process.hrtime();
 
         const elapsedSeconds = endSecs - startSecs;
@@ -25,5 +25,5 @@ export const logger: With<[Reply]> = async (f) =>
             )} us)`
         );
 
-        return reply;
-    });
+        return { tuple: [reply], depth };
+    }, 0);
