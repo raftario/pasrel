@@ -19,7 +19,7 @@
         "build": "tsc",
         "lint:fix": "eslint --fix src/**/*.ts && prettier --write **/*.{json,md}",
         "lint:check": "eslint src/**/*.ts && prettier --check **/*.{json,md}",
-        "doc": "typedoc --entryPoint '\"index\"' --out docs src",
+        "doc": "typedoc --out docs src",
         "prepublishOnly": "yarn lint && yarn build"
     },
     "dependencies": {

@@ -1,3 +1,8 @@
+/**
+ * Filters for serving static files
+ * @packageDocumentation
+ */
+
 import * as fs from "fs";
 import * as nodePath from "path";
 import * as reply from "../reply";
@@ -6,16 +11,28 @@ import { Reply } from "..";
 import { getType } from "mime";
 
 /** @internal */
-function _exists(path: string): Promise<boolean> {
-    return new Promise((res) => fs.exists(path, (e) => res(e)));
+function _stat(path: string): Promise<fs.Stats> {
+    return new Promise((res, rej) =>
+        fs.stat(path, (err, stats) => {
+            if (err) {
+                if (err.code === "ENOENT") {
+                    rej(reply.status(404));
+                } else {
+                    rej(err);
+                }
+            }
+            res(stats);
+        })
+    );
 }
 
 /** @internal */
 async function _readToReply(path: string, index: boolean): Promise<[Reply]> {
-    if (!(await _exists(path))) {
+    let stats = await _stat(path);
+    if (!stats.isFile()) {
         if (index) {
-            path = nodePath.join(path, "index.html");
-            if (!(await _exists(path))) {
+            stats = await _stat(nodePath.join(path, "index.html"));
+            if (!stats.isFile()) {
                 throw reply.status(404);
             }
         } else {
@@ -60,10 +77,21 @@ async function _readToReply(path: string, index: boolean): Promise<[Reply]> {
     }
 }
 
+/**
+ * Serves a static file
+ *
+ * @param path - Path to the file
+ */
 export function file(path: string): Filter<[Reply]> {
     return filter(() => _readToReply(path, false));
 }
 
+/**
+ * Serves as static directory and its subdirectories
+ *
+ * @param path - Path to the directory
+ * @param index - Whether to look for an `index.html` file in a directory when the directory itself is requested
+ */
 export function directory(path: string, index = true): Filter<[Reply]> {
     return new Filter(async (request, depth) => {
         const relPath = request.pathSegments.slice(depth);

@@ -1,21 +1,46 @@
+/**
+ * Filters for request headers extraction
+ * @packageDocumentation
+ */
+
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 
-export function optional(header: string): Filter<[string | undefined]> {
-    return filter(async (request) => [request.headers[header]?.toString()]);
+/**
+ * Extracts an optional header
+ *
+ * @param name - Header name
+ *
+ * @returns Optional header value
+ */
+export function optional(name: string): Filter<[string | undefined]> {
+    return filter(async (request) => [request.headers[name]?.toString()]);
 }
 
-export function required(header: string): Filter<[string]> {
+/**
+ * Extracts a required header
+ *
+ * @param name - Header name
+ *
+ * @returns Header value
+ */
+export function required(name: string): Filter<[string]> {
     return filter(async (request) => {
-        const h = request.headers[header]?.toString();
+        const h = request.headers[name]?.toString();
         if (h !== undefined) {
             return [h];
         }
-        throw reply.text(`Missing header "${header}"`, 400);
+        throw reply.text(`Missing header "${name}"`, 400);
     });
 }
 
-export function exact(name: string, value: string): Filter<[]> {
+/**
+ * Checks that the request has the header with the provided name exactly matching the provided value
+ *
+ * @param name - Header name
+ * @param value - Header value
+ */
+export function exact(name: string, value: string | undefined): Filter<[]> {
     return filter(async (request) => {
         const h = request.headers[name]?.toString();
         if (h === value) {

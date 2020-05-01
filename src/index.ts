@@ -37,7 +37,7 @@ export interface Reply {
     /**
      * Response body
      */
-    body: Buffer | string;
+    body: Buffer | string | undefined;
 }
 
 /**
@@ -45,15 +45,20 @@ export interface Reply {
  *
  * @param reply - The reply to write
  * @param response - The response to write to
+ * @param body - Whether to write the provided body
  */
-export function writeReply(reply: Reply, response: ServerResponse): void {
+export function writeReply(
+    reply: Reply,
+    response: ServerResponse,
+    body = true
+): void {
     response.statusCode = reply.status;
     for (const [name, value] of Object.entries(reply.headers)) {
         if (value !== undefined) {
             response.setHeader(name, value);
         }
     }
-    response.end(reply.body);
+    response.end(body ? reply.body : undefined);
 }
 
 /** Abstraction over Node's `http.Server` to handle filters */
@@ -95,6 +100,8 @@ export class Server {
         this.inner.on(
             "request",
             (request: IncomingMessage, response: ServerResponse) => {
+                const hasBody = request.method?.toUpperCase() !== "HEAD";
+
                 const pRequest: Request = request as Request;
                 pRequest.pathSegments = new URL(
                     request.url || "",
@@ -105,7 +112,9 @@ export class Server {
 
                 filter
                     .run(pRequest, 0)
-                    .then(({ tuple: [reply] }) => writeReply(reply, response))
+                    .then(({ tuple: [reply] }) =>
+                        writeReply(reply, response, hasBody)
+                    )
                     .catch((error) => {
                         console.error(error);
                         process.exit(1);

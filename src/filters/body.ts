@@ -1,3 +1,8 @@
+/**
+ * Filters for request body extraction
+ * @packageDocumentation
+ */
+
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 import { ParsedUrlQuery, parse as parseUrlEncoded } from "querystring";
@@ -5,14 +10,23 @@ import streamToString, { buffer as streamToBuffer } from "get-stream";
 import Busboy from "busboy";
 import { Class } from "ts-toolbelt";
 
+/**
+ * Extracts the raw request body as a `Buffer`
+ */
 export const raw: Filter<[Buffer]> = filter(async (request) => [
     await streamToBuffer(request),
 ]);
 
+/**
+ * Extracts the request body as a `string`
+ */
 export const text: Filter<[string]> = filter(async (request) => [
     await streamToString(request),
 ]);
 
+/**
+ * Possible values inside a schema for JSON body validation and extraction
+ */
 export type JsonSchema =
     | typeof String
     | typeof Number
@@ -20,7 +34,15 @@ export type JsonSchema =
     | JsonSchema[]
     | { [key: string]: JsonSchema }
     | { optional: true; type: JsonSchema };
+
+/**
+ * Schema for JSON body validation and extraction
+ */
 export type RootJsonSchema = JsonSchema[] | { [key: string]: JsonSchema };
+
+/**
+ * Converts a [[`RootJsonSchema`]] to the type it represents
+ */
 type Json<S extends RootJsonSchema> = {
     [K in keyof S]: S[K] extends Class.Class
         ? string extends Class.InstanceOf<S[K]>
@@ -164,6 +186,24 @@ async function _extractJson(
     }
 }
 
+/**
+ * Validates and extracts the request body as JSON following the provided schema
+ *
+ * ```ts
+ * // Will match { "name": "Do the laundry", "done": false }
+ * // Generic type annotation not required, only present for clarity's sake
+ * const todo: Filter<[
+ *     { name: string; description?: string; done: boolean }
+ * ]> = json({
+ *     name: String,
+ *     description: { optional: true, type: String },
+ *     done: Boolean,
+ * });
+ * ```
+ *
+ * @param schema - Schema
+ * @param extra - Whether to include extra fields not diescribed in the schema in the extracted object
+ */
 export function json<T extends RootJsonSchema>(
     schema: T,
     extra = false
@@ -180,6 +220,9 @@ export function json<T extends RootJsonSchema>(
     });
 }
 
+/**
+ * Extracts the request body as JSON
+ */
 export const anyJson: Filter<[unknown]> = filter(async (request) => {
     const text = await streamToString(request);
     try {
@@ -189,26 +232,70 @@ export const anyJson: Filter<[unknown]> = filter(async (request) => {
     }
 });
 
+/**
+ * Extracts the request body as `application/x-www-form-urlencoded`
+ */
 export const form: Filter<[ParsedUrlQuery]> = filter(async (request) => [
     parseUrlEncoded(await streamToString(request)),
 ]);
 
+/**
+ * `multipart/form-data` file
+ */
 export interface FormDataFile {
+    /**
+     * File contents
+     */
     data: Buffer;
+    /**
+     * File name
+     */
     filename: string;
+    /**
+     * Encoding of the data
+     */
     encoding: string;
+    /**
+     * Mime type of the file
+     */
     mime: string;
-}
-export interface FormDataField {
-    value: string;
-    encoding: string;
-    mime: string;
-}
-export interface FormData {
-    files: { [key: string]: FormDataFile };
-    fields: { [key: string]: FormDataField };
 }
 
+/**
+ * `multipart/form-data` field
+ */
+export interface FormDataField {
+    /**
+     * Field value
+     */
+    value: string;
+    /**
+     * Encoding of the value
+     */
+    encoding: string;
+    /**
+     * Mime type of the value
+     */
+    mime: string;
+}
+
+/**
+ * `multipart/form-data`
+ */
+export interface FormData {
+    /**
+     * Files indexed by their field name
+     */
+    files: { [key: string]: FormDataFile[] };
+    /**
+     * Fields indexed by their name
+     */
+    fields: { [key: string]: FormDataField[] };
+}
+
+/**
+ * Extracts the request body as `multipart/form-data`
+ */
 export const multipart: Filter<[FormData]> = filter(
     (request) =>
         new Promise((res, rej) => {
@@ -231,12 +318,23 @@ export const multipart: Filter<[FormData]> = filter(
                 busboy.on("file", (fieldname, file, filename, encoding, mime) =>
                     streamToBuffer(file)
                         .then((data) => {
-                            result.files[fieldname] = {
-                                data,
-                                filename,
-                                encoding,
-                                mime,
-                            };
+                            if (result.files[fieldname] === undefined) {
+                                result.files[fieldname] = [
+                                    {
+                                        data,
+                                        filename,
+                                        encoding,
+                                        mime,
+                                    },
+                                ];
+                            } else {
+                                result.files[fieldname].push({
+                                    data,
+                                    filename,
+                                    encoding,
+                                    mime,
+                                });
+                            }
                         })
                         .catch((err) => rej(err))
                 );
@@ -249,7 +347,19 @@ export const multipart: Filter<[FormData]> = filter(
                         trucatedValue,
                         encoding,
                         mime
-                    ) => (result.fields[fieldname] = { value, encoding, mime })
+                    ) => {
+                        if (result.fields[fieldname] === undefined) {
+                            result.fields[fieldname] = [
+                                { value, encoding, mime },
+                            ];
+                        } else {
+                            result.fields[fieldname].push({
+                                value,
+                                encoding,
+                                mime,
+                            });
+                        }
+                    }
                 );
 
                 busboy.on("finish", () => res([result]));

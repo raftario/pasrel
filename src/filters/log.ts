@@ -1,7 +1,20 @@
+/**
+ * Filters for logging
+ * @packageDocumentation
+ */
+
 import { Filter, With } from "../filter";
 import { Reply } from "..";
 import { _urlFromRequest } from "./url";
 
+/**
+ * A simple but functionnal logger
+ *
+ * It prints the date and time, request method, request path, request HTTP version,
+ * response status and response time to stdout.
+ *
+ * @param f - Filter
+ */
 export const logger: With<[Reply]> = async (f) =>
     new Filter(async (request, depth) => {
         const startDate = new Date();

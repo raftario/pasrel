@@ -1,7 +1,15 @@
+/**
+ * Filters for validating Content-Type
+ * @packageDocumentation
+ */
+
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 import { Request } from "..";
 
+/**
+ * A mime content type
+ */
 export interface ContentType {
     type: string;
     subtype: string;
@@ -92,6 +100,11 @@ function _matches(matcher: ContentType, matched: ContentType): boolean {
     return matcher.subtype === matched.subtype;
 }
 
+/**
+ * Checks if the client accepts the provided content type
+ *
+ * @param pattern - Mime (* is valid)
+ */
 export function accepts(pattern: string): Filter<[]> {
     const matched = _parsePattern(pattern);
     return filter(async (request) => {
@@ -105,6 +118,11 @@ export function accepts(pattern: string): Filter<[]> {
     });
 }
 
+/**
+ * Checks if the request body mathes the provided content type
+ *
+ * @param pattern - Mime (* is valid)
+ */
 export function is(pattern: string): Filter<[]> {
     const matcher = _parsePattern(pattern);
     return filter(async (request) => {

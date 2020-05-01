@@ -1,3 +1,8 @@
+/**
+ * Filters for extracting URLs
+ * @packageDocumentation
+ */
+
 import { Filter, filter } from "../filter";
 import { Request } from "..";
 
@@ -10,6 +15,9 @@ export async function _urlFromRequest(request: Request): Promise<URL> {
     return new URL(url, `http://${request.headers.host}`);
 }
 
+/**
+ * Extracts the request URL
+ */
 export const url: Filter<[URL]> = filter(async (request) => [
     await _urlFromRequest(request),
 ]);

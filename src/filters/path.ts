@@ -1,8 +1,20 @@
+/**
+ * Filters for handling paths and routing
+ *
+ * They should generally come first whenever possible to prevent weird errors
+ *
+ * @packageDocumentation
+ */
+
 import * as reply from "../reply";
 import { Class, List } from "ts-toolbelt";
 import { Filter, Finite } from "../filter";
 import { any } from "..";
 
+/**
+ * Matches an exact path segment
+ * @param literal - Segment to match
+ */
 export function segment(literal: string): Filter<[]> {
     return new Filter(async (request, depth) => {
         if (depth >= request.pathSegments.length) {
@@ -15,12 +27,19 @@ export function segment(literal: string): Filter<[]> {
     }, 0);
 }
 
+/**
+ * Matches an arbitrary string and extracts it
+ */
 export const string: Filter<[string]> = new Filter(async (request, depth) => {
     if (depth >= request.pathSegments.length) {
         throw reply.status(404);
     }
     return { tuple: [request.pathSegments[depth]], depth: depth + 1 };
 }, 0);
+
+/**
+ * Matches an arbitrary number and extracts it
+ */
 export const number: Filter<[number]> = new Filter(async (request, depth) => {
     if (depth >= request.pathSegments.length) {
         throw reply.status(404);
@@ -31,6 +50,10 @@ export const number: Filter<[number]> = new Filter(async (request, depth) => {
     }
     return { tuple: [n], depth: depth + 1 };
 }, 0);
+
+/**
+ * Matches an arbitrary boolean and extracts it
+ */
 export const boolean: Filter<[boolean]> = new Filter(async (request, depth) => {
     if (depth >= request.pathSegments.length) {
         throw reply.status(404);
@@ -44,6 +67,9 @@ export const boolean: Filter<[boolean]> = new Filter(async (request, depth) => {
     }
 }, 0);
 
+/**
+ * Matches the end of a path
+ */
 export const end: Filter<[]> = new Filter(async (request, depth) => {
     if (depth == request.pathSegments.length) {
         return { tuple: [], depth };
@@ -52,7 +78,14 @@ export const end: Filter<[]> = new Filter(async (request, depth) => {
     }
 }, 1);
 
+/**
+ * Possible types of arguments to [[`partial`]] and [[`path`]]
+ */
 type PathSegment = string | typeof String | typeof Number | typeof Boolean;
+
+/**
+ * Converts [[`PathSegment`]]s to their counterpart extracted types
+ */
 type Path<S extends PathSegment[]> = List.Filter<
     {
         [I in keyof S]: S[I] extends Class.Class
@@ -68,6 +101,16 @@ type Path<S extends PathSegment[]> = List.Filter<
     null
 >;
 
+/**
+ * Chains multiple path segments into a partial path and extracts their values
+ *
+ * This filter should only be used if additional path segments follow it,
+ * in other cases prefer [[`path`]].
+ *
+ * Under the hood, this filter just chains [[`segment`]]s, [[`string`]]s, [[`number`]]s and [[`boolean`]]s.
+ *
+ * @param segments - Path segments (must have a known length)
+ */
 export function partial<S extends PathSegment[]>(
     ...segments: S
 ): Filter<Finite<Path<S>>> {
@@ -85,6 +128,23 @@ export function partial<S extends PathSegment[]>(
     }
     return (f as unknown) as Filter<Finite<Path<S>>>;
 }
+
+/**
+ * Chains multiple path segments into a full path and extracts their values
+ *
+ * ```ts
+ * // Will match /2/plus/2
+ * // Generic type annotation not required, only present for clarity's sake
+ * const sum: Filter<[number, number]> = path(Number, "plus", Number);
+ * ```
+ *
+ * This filter should only be used if no other path segments follow it,
+ * in other cases prefer [[`partial`]].
+ *
+ * Under the hood, this filter just chains [[`partial`]] and [[`end`]].
+ *
+ * @param segments - Path segments (must have a known length)
+ */
 export function path<S extends PathSegment[]>(
     ...segments: S
 ): Filter<Finite<Path<S>>> {
