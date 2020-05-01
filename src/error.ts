@@ -17,7 +17,6 @@ export function asError(value: unknown, weight: number): Error {
     if (
         typeof value === "object" &&
         "error" in value! &&
-        "weight" in value! &&
         (value as Error).weight !== null &&
         typeof (value as Error).weight === "number"
     ) {
@@ -34,11 +33,7 @@ export function asReply(value: unknown): Reply | null {
     if (value === undefined || value === null) {
         return null;
     }
-    if (
-        typeof value === "object" &&
-        "_" in value! &&
-        (value as Reply)._ === "reply"
-    ) {
+    if (typeof value === "object" && (value as Reply)._ === "reply") {
         return value as Reply;
     }
     if (value instanceof Array && value.length >= 1) {

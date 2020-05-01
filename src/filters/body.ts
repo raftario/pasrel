@@ -60,13 +60,13 @@ type ActualJson =
 async function _extractJson(
     key: string,
     schema: JsonSchema,
-    object: unknown
+    object: unknown,
+    extra: boolean
 ): Promise<ActualJson> {
     if (object === undefined || object === null) {
         if (
             typeof schema === "object" &&
-            "optional" in schema &&
-            schema.optional === true
+            (schema as { optional: true; type: JsonSchema }).optional === true
         ) {
             return undefined;
         } else {
@@ -108,13 +108,17 @@ async function _extractJson(
             } else if (schema.length === 1) {
                 const a: ActualJson[] = [];
                 for (const [i, o] of object.entries()) {
-                    a.push(await _extractJson(i.toString(), schema[0], o));
+                    a.push(
+                        await _extractJson(i.toString(), schema[0], o, extra)
+                    );
                 }
                 return a;
             } else if (schema.length === object.length) {
                 const a: ActualJson[] = [];
                 for (const [i, s] of schema.entries()) {
-                    a.push(await _extractJson(i.toString(), s, object[i]));
+                    a.push(
+                        await _extractJson(i.toString(), s, object[i], extra)
+                    );
                 }
                 return a;
             } else {
@@ -130,17 +134,20 @@ async function _extractJson(
             );
         }
     } else if (typeof schema === "object") {
-        if ("optional" in schema && schema.optional === true) {
-            return await _extractJson(key, schema.type, object);
+        if (schema.optional === true) {
+            return await _extractJson(key, schema.type, object, extra);
         }
 
         if (typeof object === "object") {
-            const o: { [key: string]: ActualJson } = {};
+            const o: { [key: string]: ActualJson } = extra
+                ? (object as { [key: string]: ActualJson })
+                : {};
             for (const k in schema) {
                 o[k] = await _extractJson(
                     k,
                     (schema as { [key: string]: JsonSchema })[k],
-                    (object as { [key: string]: ActualJson })[k]
+                    (object as { [key: string]: ActualJson })[k],
+                    extra
                 );
             }
             return o;
@@ -155,7 +162,10 @@ async function _extractJson(
     }
 }
 
-export function json<T extends RootJsonSchema>(schema: T): Filter<[Json<T>]> {
+export function json<T extends RootJsonSchema>(
+    schema: T,
+    extra = false
+): Filter<[Json<T>]> {
     return filter(async (request) => {
         const text = await streamToString(request);
         let json: unknown;
@@ -164,7 +174,7 @@ export function json<T extends RootJsonSchema>(schema: T): Filter<[Json<T>]> {
         } catch (error) {
             throw reply.text(`Invalid JSON body: ${error}`, 400);
         }
-        return [(await _extractJson("root", schema, json)) as Json<T>];
+        return [(await _extractJson("root", schema, json, extra)) as Json<T>];
     });
 }
 

@@ -35,7 +35,7 @@ type Query<S extends QuerySchema> = {
         : never;
 };
 
-async function extractQuery(
+async function _extractQuery(
     key: string,
     type: typeof String | typeof Number | typeof Boolean,
     value: string
@@ -62,13 +62,23 @@ async function extractQuery(
     }
 }
 
-export function query<T extends QuerySchema>(schema: T): Filter<[Query<T>]> {
+export function query<T extends QuerySchema>(
+    schema: T,
+    extra = false
+): Filter<[Query<T>]> {
     const entries = Object.entries(schema);
     return filter(async (request) => {
         const q = (await _urlFromRequest(request)).searchParams;
         const result: {
             [key: string]: string | number | boolean | undefined;
         } = {};
+
+        if (extra) {
+            for (const [k, v] of q.entries()) {
+                result[k] = v;
+            }
+        }
+
         for (const [k, v] of entries) {
             const qv = q.get(k);
             if (qv === null) {
@@ -81,9 +91,9 @@ export function query<T extends QuerySchema>(schema: T): Filter<[Query<T>]> {
             }
 
             if (typeof v === "object") {
-                result[k] = await extractQuery(k, v.type, qv);
+                result[k] = await _extractQuery(k, v.type, qv);
             } else {
-                result[k] = await extractQuery(k, v, qv);
+                result[k] = await _extractQuery(k, v, qv);
             }
         }
 
