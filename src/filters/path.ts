@@ -68,13 +68,9 @@ type Path<S extends PathSegment[]> = List.Filter<
     null
 >;
 
-export function path<S extends PathSegment[]>(
+export function partial<S extends PathSegment[]>(
     ...segments: S
 ): Filter<Finite<Path<S>>> {
-    if (segment.length === 0) {
-        return (end as unknown) as Filter<Finite<Path<S>>>;
-    }
-
     let f: Filter<unknown[]> = any;
     for (const s of segments) {
         if (s === String) {
@@ -87,5 +83,15 @@ export function path<S extends PathSegment[]>(
             f = f.and(segment(s as string));
         }
     }
-    return (f.and(end) as unknown) as Filter<Finite<Path<S>>>;
+    return (f as unknown) as Filter<Finite<Path<S>>>;
+}
+export function path<S extends PathSegment[]>(
+    ...segments: S
+): Filter<Finite<Path<S>>> {
+    if (segments.length === 0) {
+        return (end as unknown) as Filter<Finite<Path<S>>>;
+    }
+    return (partial(...segments).and(end) as unknown) as Filter<
+        Finite<Path<S>>
+    >;
 }
