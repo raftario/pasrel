@@ -20,7 +20,7 @@ export function asError(value: unknown, weight: number): Error {
         (value as Error).weight !== null &&
         typeof (value as Error).weight === "number"
     ) {
-        return value as Error;
+        return { ...(value as Error), weight };
     } else {
         return {
             error: value,

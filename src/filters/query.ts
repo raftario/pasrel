@@ -37,9 +37,9 @@ type Query<S extends QuerySchema> = {
 
 async function _extractQuery(
     key: string,
-    type: typeof String | typeof Number | typeof Boolean,
+    type: typeof String | typeof Number,
     value: string
-): Promise<string | number | boolean> {
+): Promise<string | number> {
     if (type === String) {
         return value;
     } else if (type === Number) {
@@ -48,14 +48,6 @@ async function _extractQuery(
             return n;
         } else {
             throw reply.text(`Key "${key}" of query should be a number`, 400);
-        }
-    } else if (type === Boolean) {
-        if (value === "true") {
-            return true;
-        } else if (value === "false") {
-            return false;
-        } else {
-            throw reply.text(`Key "${key}" of query should be a boolean`, 400);
         }
     } else {
         throw new Error("Invalid schema");
@@ -82,7 +74,10 @@ export function query<T extends QuerySchema>(
         for (const [k, v] of entries) {
             const qv = q.get(k);
             if (qv === null) {
-                if (typeof v === "object") {
+                if (v === Boolean) {
+                    result[k] = false;
+                    continue;
+                } else if (typeof v === "object") {
                     result[k] = undefined;
                     continue;
                 } else {
@@ -90,10 +85,24 @@ export function query<T extends QuerySchema>(
                 }
             }
 
-            if (typeof v === "object") {
-                result[k] = await _extractQuery(k, v.type, qv);
+            if (v === Boolean) {
+                result[k] = true;
+            } else if (typeof v === "object") {
+                if (v.type === Boolean) {
+                    result[k] = true;
+                } else {
+                    result[k] = await _extractQuery(
+                        k,
+                        v.type as typeof String | typeof Number,
+                        qv
+                    );
+                }
             } else {
-                result[k] = await _extractQuery(k, v, qv);
+                result[k] = await _extractQuery(
+                    k,
+                    v as typeof String | typeof Number,
+                    qv
+                );
             }
         }
 
