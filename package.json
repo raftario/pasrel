@@ -17,8 +17,8 @@
     },
     "scripts": {
         "build": "tsc",
-        "lint:fix": "eslint --fix src/**/*.ts && prettier --write **/*.{json,md}",
-        "lint:check": "eslint src/**/*.ts && prettier --check **/*.{json,md}",
+        "lint:fix": "eslint --fix src/**/*.ts && prettier --write **/*.{json,md,yml}",
+        "lint:check": "eslint src/**/*.ts && prettier --check **/*.{json,md,yml}",
         "doc": "typedoc --out docs src",
         "prepublishOnly": "yarn lint && yarn build"
     },
