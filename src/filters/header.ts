@@ -14,7 +14,9 @@ import { Filter, filter } from "../filter";
  * @returns Optional header value
  */
 export function optional(name: string): Filter<[string | undefined]> {
-    return filter(async (request) => [request.headers[name]?.toString()]);
+    return filter(async (request) => [
+        request.headers[name.toLowerCase()]?.toString(),
+    ]);
 }
 
 /**
@@ -26,7 +28,7 @@ export function optional(name: string): Filter<[string | undefined]> {
  */
 export function required(name: string): Filter<[string]> {
     return filter(async (request) => {
-        const h = request.headers[name]?.toString();
+        const h = request.headers[name.toLowerCase()]?.toString();
         if (h !== undefined) {
             return [h];
         }
@@ -42,7 +44,7 @@ export function required(name: string): Filter<[string]> {
  */
 export function exact(name: string, value: string | undefined): Filter<[]> {
     return filter(async (request) => {
-        const h = request.headers[name]?.toString();
+        const h = request.headers[name.toLowerCase()]?.toString();
         if (h === value) {
             return [];
         }
