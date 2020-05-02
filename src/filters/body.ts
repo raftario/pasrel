@@ -110,7 +110,7 @@ async function _extractJson(
             );
         }
     } else if (schema === Number) {
-        if (typeof object === "number" && !isNaN(object)) {
+        if (typeof object === "number" && !Number.isNaN(object)) {
             return object;
         } else {
             throw reply.text(
@@ -127,8 +127,8 @@ async function _extractJson(
                 400
             );
         }
-    } else if (schema instanceof Array) {
-        if (object instanceof Array) {
+    } else if (Array.isArray(schema)) {
+        if (Array.isArray(object)) {
             if (schema.length === 0) {
                 return [];
             } else if (schema.length === 1) {

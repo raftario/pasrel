@@ -55,7 +55,7 @@ async function _extractQuery(
         return value;
     } else if (type === Number) {
         const n = Number(value);
-        if (!isNaN(n)) {
+        if (!Number.isNaN(n)) {
             return n;
         } else {
             throw reply.text(`Key "${key}" of query should be a number`, 400);

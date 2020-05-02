@@ -45,7 +45,7 @@ export const number: Filter<[number]> = new Filter(async (request, depth) => {
         throw reply.status(404);
     }
     const n = Number(request.pathSegments[depth]);
-    if (isNaN(n)) {
+    if (Number.isNaN(n)) {
         throw reply.status(404);
     }
     return { tuple: [n], depth: depth + 1 };

@@ -46,7 +46,6 @@ export function asError(value: unknown, weight: number): Error {
     if (
         typeof value === "object" &&
         "error" in value! &&
-        (value as Error).weight !== null &&
         typeof (value as Error).weight === "number"
     ) {
         return value as Error;
@@ -65,20 +64,20 @@ export function asError(value: unknown, weight: number): Error {
  *
  * @returns A [[`Reply`]] if the value could be converted, `null` if it couldn't
  */
-export function asReply(value: unknown): Reply | null {
+export function asReply(value: unknown): Reply | undefined {
     if (value === undefined || value === null) {
-        return null;
+        return undefined;
     }
     if (typeof value === "object" && (value as Reply)._ === "reply") {
         return value as Reply;
     }
-    if (value instanceof Array && value.length >= 1) {
+    if (Array.isArray(value) && value.length >= 1) {
         return asReply(value[0]);
     }
     if (typeof value === "object" && "error" in value!) {
         return asReply((value as Error).error);
     }
-    return null;
+    return undefined;
 }
 
 /**
@@ -92,7 +91,7 @@ export const recover: Recover<[Reply]> = async (error) =>
     filter(
         async (): Promise<[Reply]> => {
             const r = asReply(error.error);
-            if (r !== null) {
+            if (r !== undefined) {
                 return [r];
             } else {
                 console.error(error);
