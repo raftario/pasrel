@@ -14,7 +14,7 @@ test("basic valid", async (t) => {
         `${credentials.user}:${credentials.password}`,
         "utf-8"
     ).toString("base64")}`;
-    const request = mock.get("/").header("authorization", header).build();
+    const request = mock.get().header("authorization", header).build();
 
     const result = await filter.run(request, 0);
 
@@ -23,7 +23,7 @@ test("basic valid", async (t) => {
 
 test("basic missing header", async (t) => {
     const filter = auth.basic("realm");
-    const request = mock.get("/").build();
+    const request = mock.get().build();
 
     let reply: Reply | undefined;
     try {
@@ -39,10 +39,7 @@ test("basic missing header", async (t) => {
 
 test("basic wrong scheme", async (t) => {
     const filter = auth.basic("realm");
-    const request = mock
-        .get("/")
-        .header("authorization", "Bearer token")
-        .build();
+    const request = mock.get().header("authorization", "Bearer token").build();
 
     let reply: Reply | undefined;
     try {
@@ -58,10 +55,7 @@ test("basic wrong scheme", async (t) => {
 
 test("basic invalid userpass", async (t) => {
     const filter = auth.basic("realm");
-    const request = mock
-        .get("/")
-        .header("authorization", "Basic invalid")
-        .build();
+    const request = mock.get().header("authorization", "Basic invalid").build();
 
     let reply: Reply | undefined;
     try {

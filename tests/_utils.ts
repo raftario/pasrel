@@ -5,7 +5,7 @@ import { Request } from "../src";
 class RequestBuilder {
     private readonly inner: Request;
 
-    constructor(method: string, path: string) {
+    constructor(method: string, path = "/") {
         const inner = new Readable();
 
         (inner as IncomingMessage).aborted = false;
@@ -76,22 +76,22 @@ class RequestBuilder {
     }
 }
 
-function get(path: string): RequestBuilder {
+function get(path?: string): RequestBuilder {
     return new RequestBuilder("GET", path);
 }
-function head(path: string): RequestBuilder {
+function head(path?: string): RequestBuilder {
     return new RequestBuilder("HEAD", path);
 }
-function post(path: string): RequestBuilder {
+function post(path?: string): RequestBuilder {
     return new RequestBuilder("POST", path);
 }
-function put(path: string): RequestBuilder {
+function put(path?: string): RequestBuilder {
     return new RequestBuilder("PUT", path);
 }
-function del(path: string): RequestBuilder {
+function del(path?: string): RequestBuilder {
     return new RequestBuilder("DELETE", path);
 }
-function patch(path: string): RequestBuilder {
+function patch(path?: string): RequestBuilder {
     return new RequestBuilder("PATCH", path);
 }
 

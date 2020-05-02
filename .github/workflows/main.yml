@@ -1,4 +1,4 @@
-name: Build
+name: Build & Test
 on: [push, pull_request]
 jobs:
     build:
@@ -14,3 +14,16 @@ jobs:
               run: yarn tsc
             - name: Build examples
               run: yarn tsc -p examples
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: "12.x"
+            - name: Install dependencies
+              run: yarn
+            - name: Run test suite
+              run: yarn test
+            - name: Check for linting errors
+              run: yarn lint:check
