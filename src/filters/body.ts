@@ -39,39 +39,38 @@ export type JsonSchema =
 /**
  * Schema for JSON body validation and extraction
  */
-export type RootJsonSchema =
-    | Tuple<JsonSchema>
-    | JsonSchema[]
-    | { [key: string]: JsonSchema };
+export type RootJsonSchema = Tuple<JsonSchema> | { [key: string]: JsonSchema };
 
 /**
  * Converts a [[`RootJsonSchema`]] to the type it represents
+ *
+ * Single element tuples will be translated to arrays.
  */
-type JsonMap<S extends RootJsonSchema> = {
-    [K in keyof S]: true extends IsInstanceOf<string, S[K]>
-        ? string
-        : true extends IsInstanceOf<number, S[K]>
-        ? number
-        : true extends IsInstanceOf<boolean, S[K]>
-        ? boolean
-        : S[K] extends RootJsonSchema
-        ? JsonMap<S[K]>
-        : S[K] extends { optional: true; type: infer T }
-        ? T extends JsonSchema
-            ? true extends IsInstanceOf<string, T>
-                ? string | undefined
-                : true extends IsInstanceOf<number, T>
-                ? number | undefined
-                : true extends IsInstanceOf<boolean, T>
-                ? boolean | undefined
-                : T extends RootJsonSchema
-                ? JsonMap<T> | undefined
-                : never
-            : never
-        : never;
-};
-
-type test = JsonMap<[typeof String, typeof Number, typeof Boolean]>;
+type JsonMap<S extends RootJsonSchema> = S extends [unknown]
+    ? JsonMap<[S[0], []]>[0][]
+    : {
+          [K in keyof S]: true extends IsInstanceOf<string, S[K]>
+              ? string
+              : true extends IsInstanceOf<number, S[K]>
+              ? number
+              : true extends IsInstanceOf<boolean, S[K]>
+              ? boolean
+              : S[K] extends RootJsonSchema
+              ? JsonMap<S[K]>
+              : S[K] extends { optional: true; type: infer T }
+              ? T extends JsonSchema
+                  ? true extends IsInstanceOf<string, T>
+                      ? string | undefined
+                      : true extends IsInstanceOf<number, T>
+                      ? number | undefined
+                      : true extends IsInstanceOf<boolean, T>
+                      ? boolean | undefined
+                      : T extends RootJsonSchema
+                      ? JsonMap<T> | undefined
+                      : never
+                  : never
+              : never;
+      };
 
 /** @internal */
 type Json =
