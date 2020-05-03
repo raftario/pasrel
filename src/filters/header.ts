@@ -5,6 +5,18 @@
 
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
+import { Request } from "..";
+
+/** @internal */
+function _getHeader(name: string, request: Request): string | undefined {
+    const lname = name.toLowerCase();
+    for (const [n, v] of Object.entries(request.headers)) {
+        if (n.toLowerCase() === lname) {
+            return v?.toString();
+        }
+    }
+    return undefined;
+}
 
 /**
  * Extracts an optional header
@@ -14,9 +26,7 @@ import { Filter, filter } from "../filter";
  * @returns Optional header value
  */
 export function optional(name: string): Filter<[string | undefined]> {
-    return filter(async (request) => [
-        request.headers[name.toLowerCase()]?.toString(),
-    ]);
+    return filter(async (request) => [_getHeader(name, request)]);
 }
 
 /**
@@ -28,7 +38,7 @@ export function optional(name: string): Filter<[string | undefined]> {
  */
 export function required(name: string): Filter<[string]> {
     return filter(async (request) => {
-        const h = request.headers[name.toLowerCase()]?.toString();
+        const h = _getHeader(name, request);
         if (h !== undefined) {
             return [h];
         }
@@ -44,7 +54,7 @@ export function required(name: string): Filter<[string]> {
  */
 export function exact(name: string, value: string | undefined): Filter<[]> {
     return filter(async (request) => {
-        const h = request.headers[name.toLowerCase()]?.toString();
+        const h = _getHeader(name, request);
         if (h === value) {
             return [];
         }

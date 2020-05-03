@@ -7,7 +7,7 @@ import test from "ava";
 test("raw", async (t) => {
     const filter = body.raw;
     const b = Buffer.from([0, 1, 2, 3]);
-    const request = mock.get().raw(b).build();
+    const request = mock.post().raw(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -16,7 +16,7 @@ test("raw", async (t) => {
 
 test("raw empty", async (t) => {
     const filter = body.raw;
-    const request = mock.get().build();
+    const request = mock.post().build();
 
     const result = await filter.run(request, 0);
 
@@ -26,7 +26,7 @@ test("raw empty", async (t) => {
 test("text", async (t) => {
     const filter = body.text;
     const b = "string";
-    const request = mock.get().text(b).build();
+    const request = mock.post().text(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -35,7 +35,7 @@ test("text", async (t) => {
 
 test("text empty", async (t) => {
     const filter = body.text;
-    const request = mock.get().build();
+    const request = mock.post().build();
 
     const result = await filter.run(request, 0);
 
@@ -45,7 +45,7 @@ test("text empty", async (t) => {
 test("json valid object", async (t) => {
     const filter = body.json({ s: String, n: Number, b: Boolean });
     const b = { s: "string", n: 2, b: true };
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -55,7 +55,7 @@ test("json valid object", async (t) => {
 test("json valid array", async (t) => {
     const filter = body.json([String, Number, Boolean]);
     const b = ["string", 2, true];
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -65,7 +65,7 @@ test("json valid array", async (t) => {
 test("json invalid object", async (t) => {
     const filter = body.json({ s: String, n: Number, b: Boolean });
     const b = { s: "string", n: 2, b: "true" };
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const reply = asReply(await macros.rej(t, filter, request));
 
@@ -86,8 +86,8 @@ test("json extra", async (t) => {
     const extra = body.json({ s: String, n: Number, b: Boolean }, true);
     const noextra = body.json({ s: String, n: Number, b: Boolean }, false);
     const b = { s: "string", n: 2, b: true, extra: "extra" };
-    const r1 = mock.get().json(b).build();
-    const r2 = mock.get().json(b).build();
+    const r1 = mock.post().json(b).build();
+    const r2 = mock.post().json(b).build();
 
     const extraResult = await extra.run(r1, 0);
     const noextraResult = await noextra.run(r2, 0);
@@ -150,7 +150,7 @@ test("json valid complex", async (t) => {
         oobj: undefined,
         oary: ["amet", -1, true],
     };
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -178,7 +178,7 @@ test("json invalid complex", async (t) => {
         oobj: undefined,
         oary: ["amet", -1, "true"],
     };
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const reply = asReply(await macros.rej(t, filter, request));
 
@@ -188,7 +188,7 @@ test("json invalid complex", async (t) => {
 test("json any valid", async (t) => {
     const filter = body.anyJson;
     const b = { s: "string" };
-    const request = mock.get().json(b).build();
+    const request = mock.post().json(b).build();
 
     const result = await filter.run(request, 0);
 
@@ -197,7 +197,7 @@ test("json any valid", async (t) => {
 
 test("json any invalid", async (t) => {
     const filter = body.anyJson;
-    const request = mock.get().text("not json").build();
+    const request = mock.post().text("not json").build();
 
     const reply = asReply(await macros.rej(t, filter, request));
 
@@ -207,12 +207,11 @@ test("json any invalid", async (t) => {
 test("form", async (t) => {
     const filter = body.form;
     const b = { s: "string" };
-    const request = mock.get().text(qs.encode(b)).build();
+    const request = mock.post().text(qs.encode(b)).build();
 
     const result = await filter.run(request, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
 
-test.todo("multipart valid");
-test.todo("multipart invalid");
+test.todo("multipart");
