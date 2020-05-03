@@ -88,9 +88,10 @@
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_filters_body_.html#json" class="tsd-kind-icon">Json</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_filters_body_.html#jsonmap" class="tsd-kind-icon">Json<wbr>Map</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_filters_body_.html#jsonschema" class="tsd-kind-icon">Json<wbr>Schema</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="_filters_body_.html#rootjsonschema" class="tsd-kind-icon">Root<wbr>Json<wbr>Schema</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="_filters_body_.html#test" class="tsd-kind-icon">test</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -106,7 +107,7 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_filters_body_.html#json-1" class="tsd-kind-icon">json</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_filters_body_.html#json" class="tsd-kind-icon">json</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,12 +116,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-					<a name="json" class="tsd-anchor"></a>
-					<h3>Json</h3>
-					<div class="tsd-signature tsd-kind-icon">Json&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
+					<a name="jsonmap" class="tsd-anchor"></a>
+					<h3>Json<wbr>Map</h3>
+					<div class="tsd-signature tsd-kind-icon">Json<wbr>Map&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L47">src/filters/body.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L50">src/filters/body.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -146,7 +147,7 @@
 					<div class="tsd-signature tsd-kind-icon">Json<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol"> | </span><a href="_filters_body_.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>optional<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>type<span class="tsd-signature-symbol">: </span><a href="_filters_body_.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L31">src/filters/body.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L31">src/filters/body.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -158,10 +159,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="rootjsonschema" class="tsd-anchor"></a>
 					<h3>Root<wbr>Json<wbr>Schema</h3>
-					<div class="tsd-signature tsd-kind-icon">Root<wbr>Json<wbr>Schema<span class="tsd-signature-symbol">:</span> <a href="_filters_body_.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span></div>
+					<div class="tsd-signature tsd-kind-icon">Root<wbr>Json<wbr>Schema<span class="tsd-signature-symbol">:</span> <a href="_types_.html#tuple" class="tsd-signature-type">Tuple</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_body_.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="_filters_body_.html#jsonschema" class="tsd-signature-type">JsonSchema</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L42">src/filters/body.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L42">src/filters/body.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -169,6 +170,16 @@
 							<p>Schema for JSON body validation and extraction</p>
 						</div>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+					<a name="test" class="tsd-anchor"></a>
+					<h3>test</h3>
+					<div class="tsd-signature tsd-kind-icon">test<span class="tsd-signature-symbol">:</span> <a href="_filters_body_.html#jsonmap" class="tsd-signature-type">JsonMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Boolean</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L74">src/filters/body.ts:74</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -179,7 +190,7 @@
 					<div class="tsd-signature tsd-kind-icon">any<wbr>Json<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = filter(async (request) &#x3D;&gt; {const text &#x3D; await streamToString(request);try {return [JSON.parse(text)];} catch (error) {throw reply.text(&#x60;Invalid JSON body: ${error}&#x60;, 400);}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L235">src/filters/body.ts:235</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L242">src/filters/body.ts:242</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -194,7 +205,7 @@
 					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">ParsedUrlQuery</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = filter(async (request) &#x3D;&gt; [parseUrlEncoded(await streamToString(request)),])</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L247">src/filters/body.ts:247</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L254">src/filters/body.ts:254</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -209,7 +220,7 @@
 					<div class="tsd-signature tsd-kind-icon">multipart<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../interfaces/_filters_body_.formdata.html" class="tsd-signature-type">FormData</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = filter((request) &#x3D;&gt;new Promise((res, rej) &#x3D;&gt; {if (!request.headers[&quot;content-type&quot;]?.toLowerCase().startsWith(&quot;multipart/form-data&quot;)) {rej(reply.text(&quot;Expected multipart body&quot;, 400));}const result: FormData &#x3D; { files: {}, fields: {} };request.on(&quot;error&quot;, (err) &#x3D;&gt; rej(err));try {const busboy &#x3D; new Busboy({headers: request.headers,});busboy.on(&quot;file&quot;, (fieldname, file, filename, encoding, mime) &#x3D;&gt;streamToBuffer(file).then((data) &#x3D;&gt; {if (result.files[fieldname] &#x3D;&#x3D;&#x3D; undefined) {result.files[fieldname] &#x3D; [{data,filename,encoding,mime,},];} else {result.files[fieldname].push({data,filename,encoding,mime,});}}).catch((err) &#x3D;&gt; rej(err)));busboy.on(&quot;field&quot;,(fieldname,value,truncatedFieldname,trucatedValue,encoding,mime) &#x3D;&gt; {if (result.fields[fieldname] &#x3D;&#x3D;&#x3D; undefined) {result.fields[fieldname] &#x3D; [{ value, encoding, mime },];} else {result.fields[fieldname].push({value,encoding,mime,});}});busboy.on(&quot;finish&quot;, () &#x3D;&gt; res([result]));pump(request, busboy, (err) &#x3D;&gt; {if (err) {rej(err);}});} catch (err) {rej(reply.text(&quot;Invalid multipart body&quot;, 400));}}))</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L308">src/filters/body.ts:308</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L315">src/filters/body.ts:315</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -224,7 +235,7 @@
 					<div class="tsd-signature tsd-kind-icon">raw<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = filter(async (request) &#x3D;&gt; [await streamToBuffer(request),])</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L17">src/filters/body.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L17">src/filters/body.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -239,12 +250,12 @@
 					<div class="tsd-signature tsd-kind-icon">text<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = filter(async (request) &#x3D;&gt; [await streamToString(request),])</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L24">src/filters/body.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L24">src/filters/body.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Extracts the request body as a <code>string</code></p>
+							<p>Extracts the request body as a string</p>
 						</div>
 					</div>
 				</section>
@@ -252,16 +263,16 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="json-1" class="tsd-anchor"></a>
+					<a name="json" class="tsd-anchor"></a>
 					<h3>json</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">json&lt;T&gt;<span class="tsd-signature-symbol">(</span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, extra<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="_filters_body_.html#json" class="tsd-signature-type">Json</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">json&lt;T&gt;<span class="tsd-signature-symbol">(</span>schema<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, extra<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="_filters_body_.html#jsonmap" class="tsd-signature-type">JsonMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/body.ts#L216">src/filters/body.ts:216</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/body.ts#L223">src/filters/body.ts:223</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -299,7 +310,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="_filters_body_.html#json" class="tsd-signature-type">Json</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="_filters_body_.html#jsonmap" class="tsd-signature-type">JsonMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -373,13 +384,16 @@
 						<a href="../interfaces/_filters_body_.formdatafile.html" class="tsd-kind-icon">Form<wbr>Data<wbr>File</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="_filters_body_.html#json" class="tsd-kind-icon">Json</a>
+						<a href="_filters_body_.html#jsonmap" class="tsd-kind-icon">Json<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="_filters_body_.html#jsonschema" class="tsd-kind-icon">Json<wbr>Schema</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="_filters_body_.html#rootjsonschema" class="tsd-kind-icon">Root<wbr>Json<wbr>Schema</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
+						<a href="_filters_body_.html#test" class="tsd-kind-icon">test</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="_filters_body_.html#anyjson" class="tsd-kind-icon">any<wbr>Json</a>
@@ -397,7 +411,7 @@
 						<a href="_filters_body_.html#text" class="tsd-kind-icon">text</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="_filters_body_.html#json-1" class="tsd-kind-icon">json</a>
+						<a href="_filters_body_.html#json" class="tsd-kind-icon">json</a>
 					</li>
 				</ul>
 			</nav>

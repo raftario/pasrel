@@ -81,7 +81,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_filters_path_.html#path" class="tsd-kind-icon">Path</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported"><a href="_filters_path_.html#pathmap" class="tsd-kind-icon">Path<wbr>Map</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported"><a href="_filters_path_.html#pathsegment" class="tsd-kind-icon">Path<wbr>Segment</a></li>
 							</ul>
 						</section>
@@ -98,7 +98,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_filters_path_.html#partial" class="tsd-kind-icon">partial</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_filters_path_.html#path-1" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="_filters_path_.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="_filters_path_.html#segment" class="tsd-kind-icon">segment</a></li>
 							</ul>
 						</section>
@@ -108,12 +108,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>Path</h3>
-					<div class="tsd-signature tsd-kind-icon">Path&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="pathmap" class="tsd-anchor"></a>
+					<h3>Path<wbr>Map</h3>
+					<div class="tsd-signature tsd-kind-icon">Path<wbr>Map&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L89">src/filters/path.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L89">src/filters/path.ts:89</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -134,12 +134,12 @@
 					<div class="tsd-signature tsd-kind-icon">Path<wbr>Segment<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L84">src/filters/path.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L84">src/filters/path.ts:84</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Possible types of arguments to <a href="_filters_path_.html#partial"><code>partial</code></a> and <a href="_filters_path_.html#path-1"><code>path</code></a></p>
+							<p>Possible types of arguments to <a href="_filters_path_.html#partial"><code>partial</code></a> and <a href="_filters_path_.html#path"><code>path</code></a></p>
 						</div>
 					</div>
 				</section>
@@ -152,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">boolean<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw reply.status(404);}if (request.pathSegments[depth] &#x3D;&#x3D;&#x3D; &quot;true&quot;) {return { tuple: [true as boolean], depth: depth + 1 };} else if (request.pathSegments[depth] &#x3D;&#x3D;&#x3D; &quot;false&quot;) {return { tuple: [false as boolean], depth: depth + 1 };} else {throw reply.status(404);}}, 0)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L57">src/filters/path.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L57">src/filters/path.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -167,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, depth) &#x3D;&gt; {if (depth &#x3D;&#x3D; request.pathSegments.length) {return { tuple: [], depth };} else {throw reply.status(404);}}, 1)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L73">src/filters/path.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L73">src/filters/path.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,7 +182,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw reply.status(404);}const n &#x3D; Number(request.pathSegments[depth]);if (Number.isNaN(n)) {throw reply.status(404);}return { tuple: [n], depth: depth + 1 };}, 0)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L43">src/filters/path.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L43">src/filters/path.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -197,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">string<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw reply.status(404);}return { tuple: [request.pathSegments[depth]], depth: depth + 1 };}, 0)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L33">src/filters/path.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L33">src/filters/path.ts:33</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,13 +213,13 @@
 					<a name="partial" class="tsd-anchor"></a>
 					<h3>partial</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">partial&lt;S&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>segments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#path" class="tsd-signature-type">Path</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">partial&lt;S&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>segments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#pathmap" class="tsd-signature-type">PathMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L111">src/filters/path.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L111">src/filters/path.ts:111</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -227,7 +227,7 @@
 									<p>Chains multiple path segments into a partial path and extracts their values</p>
 								</div>
 								<p>This filter should only be used if additional path segments follow it,
-								in other cases prefer <a href="_filters_path_.html#path-1"><code>path</code></a>.</p>
+								in other cases prefer <a href="_filters_path_.html#path"><code>path</code></a>.</p>
 								<p>Under the hood, this filter just chains <a href="_filters_path_.html#segment"><code>segment</code></a>s, <a href="_filters_path_.html#string"><code>string</code></a>s, <a href="_filters_path_.html#number"><code>number</code></a>s and <a href="_filters_path_.html#boolean"><code>boolean</code></a>s.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -245,21 +245,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#path" class="tsd-signature-type">Path</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#pathmap" class="tsd-signature-type">PathMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="path-1" class="tsd-anchor"></a>
+					<a name="path" class="tsd-anchor"></a>
 					<h3>path</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">path&lt;S&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>segments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#path" class="tsd-signature-type">Path</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">path&lt;S&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>segments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#pathmap" class="tsd-signature-type">PathMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L145">src/filters/path.ts:145</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L145">src/filters/path.ts:145</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -288,7 +288,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#path" class="tsd-signature-type">Path</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><a href="_filters_path_.html#pathmap" class="tsd-signature-type">PathMap</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">S</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -302,7 +302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/f083e61/src/filters/path.ts#L18">src/filters/path.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/de5ed1b/src/filters/path.ts#L18">src/filters/path.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -384,7 +384,7 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="_filters_path_.html#path" class="tsd-kind-icon">Path</a>
+						<a href="_filters_path_.html#pathmap" class="tsd-kind-icon">Path<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
 						<a href="_filters_path_.html#pathsegment" class="tsd-kind-icon">Path<wbr>Segment</a>
@@ -405,7 +405,7 @@
 						<a href="_filters_path_.html#partial" class="tsd-kind-icon">partial</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="_filters_path_.html#path-1" class="tsd-kind-icon">path</a>
+						<a href="_filters_path_.html#path" class="tsd-kind-icon">path</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="_filters_path_.html#segment" class="tsd-kind-icon">segment</a>
