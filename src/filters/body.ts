@@ -49,21 +49,21 @@ export type RootJsonSchema = Tuple<JsonSchema> | { [key: string]: JsonSchema };
 type JsonMap<S extends RootJsonSchema> = S extends [unknown]
     ? JsonMap<[S[0], []]>[0][]
     : {
-          [K in keyof S]: true extends IsInstanceOf<string, S[K]>
+          [K in keyof S]: true extends IsInstanceOf<S[K], string>
               ? string
-              : true extends IsInstanceOf<number, S[K]>
+              : true extends IsInstanceOf<S[K], number>
               ? number
-              : true extends IsInstanceOf<boolean, S[K]>
+              : true extends IsInstanceOf<S[K], boolean>
               ? boolean
               : S[K] extends RootJsonSchema
               ? JsonMap<S[K]>
               : S[K] extends { optional: true; type: infer T }
               ? T extends JsonSchema
-                  ? true extends IsInstanceOf<string, T>
+                  ? true extends IsInstanceOf<T, string>
                       ? string | undefined
-                      : true extends IsInstanceOf<number, T>
+                      : true extends IsInstanceOf<T, number>
                       ? number | undefined
-                      : true extends IsInstanceOf<boolean, T>
+                      : true extends IsInstanceOf<T, boolean>
                       ? boolean | undefined
                       : T extends RootJsonSchema
                       ? JsonMap<T> | undefined

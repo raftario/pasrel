@@ -34,15 +34,15 @@ export type Tuple<T = unknown> = [
 /**
  * Concatenates two tuples
  *
- * @typeParam T - Left tuple
- * @typeParam U - Right tuple
+ * @typeParam L - Left tuple
+ * @typeParam R - Right tuple
  */
-export type Concat<T extends Tuple, U extends Tuple> = List.Concat<
-    T,
-    U
-> extends infer R
-    ? R extends Tuple
-        ? R
+export type Concat<L extends Tuple, R extends Tuple> = List.Concat<
+    L,
+    R
+> extends infer T
+    ? T extends Tuple
+        ? T
         : never
     : never;
 
@@ -50,7 +50,7 @@ export type Concat<T extends Tuple, U extends Tuple> = List.Concat<
  * Filters a tuple
  *
  * @typeParam T - Tuple to filter
- * @typeParam U - Elements to filter out
+ * @typeParam F - Elements to filter out
  */
 export type Filter<T extends Tuple, F = null> = List.Filter<
     T,
@@ -62,12 +62,15 @@ export type Filter<T extends Tuple, F = null> = List.Filter<
     : never;
 
 /**
- * Checks if a type is and instance of another type
+ * Checks if a type is an instance of another type
  *
- * @returns `true` if T is an instance of U, `false` otherwise
+ * @typeParam C - Class
+ * @typeParam I - Instance
+ *
+ * @returns `true` or `false`
  */
-export type IsInstanceOf<T, U> = U extends Class.Class
-    ? T extends Class.InstanceOf<U>
+export type IsInstanceOf<C, I> = C extends Class.Class
+    ? I extends Class.InstanceOf<C>
         ? true
         : false
     : false;

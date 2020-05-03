@@ -26,16 +26,16 @@ export type QuerySchema = {
  * Converts a [[`QuerySchema`]] to the type it represents
  */
 type QueryMap<S extends QuerySchema> = {
-    [K in keyof S]: true extends IsInstanceOf<string, S[K]>
+    [K in keyof S]: true extends IsInstanceOf<S[K], string>
         ? string
-        : true extends IsInstanceOf<number, S[K]>
+        : true extends IsInstanceOf<S[K], number>
         ? number
-        : true extends IsInstanceOf<boolean, S[K]>
+        : true extends IsInstanceOf<S[K], boolean>
         ? boolean
         : S[K] extends { optional: true; type: infer T }
-        ? true extends IsInstanceOf<string, T>
+        ? true extends IsInstanceOf<T, string>
             ? string | undefined
-            : true extends IsInstanceOf<number, T>
+            : true extends IsInstanceOf<T, number>
             ? number | undefined
             : never
         : never;

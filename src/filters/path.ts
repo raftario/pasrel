@@ -88,11 +88,11 @@ type PathSegment = string | typeof String | typeof Number | typeof Boolean;
  */
 type PathMap<S extends Tuple<PathSegment>> = FilterType<
     {
-        [I in keyof S]: true extends IsInstanceOf<string, S[I]>
+        [I in keyof S]: true extends IsInstanceOf<S[I], string>
             ? string
-            : true extends IsInstanceOf<number, S[I]>
+            : true extends IsInstanceOf<S[I], number>
             ? number
-            : true extends IsInstanceOf<boolean, S[I]>
+            : true extends IsInstanceOf<S[I], boolean>
             ? boolean
             : null;
     }
