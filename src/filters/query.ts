@@ -25,7 +25,7 @@ export type QuerySchema = {
 /**
  * Converts a [[`QuerySchema`]] to the type it represents
  */
-type Query<S extends QuerySchema> = {
+type QueryMap<S extends QuerySchema> = {
     [K in keyof S]: true extends IsInstanceOf<string, S[K]>
         ? string
         : true extends IsInstanceOf<number, S[K]>
@@ -82,7 +82,7 @@ async function _extractQuery(
 export function query<T extends QuerySchema>(
     schema: T,
     extra = false
-): Filter<[Query<T>]> {
+): Filter<[QueryMap<T>]> {
     const entries = Object.entries(schema);
     return filter(async (request) => {
         const q = (await _urlFromRequest(request)).searchParams;
@@ -123,7 +123,7 @@ export function query<T extends QuerySchema>(
             }
         }
 
-        return [result as Query<T>];
+        return [result as QueryMap<T>];
     });
 }
 

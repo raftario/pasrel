@@ -86,7 +86,7 @@ type PathSegment = string | typeof String | typeof Number | typeof Boolean;
 /**
  * Maps [[`PathSegment`]]s to their counterpart extracted types
  */
-type Path<S extends Tuple<PathSegment>> = FilterType<
+type PathMap<S extends Tuple<PathSegment>> = FilterType<
     {
         [I in keyof S]: true extends IsInstanceOf<string, S[I]>
             ? string
@@ -110,7 +110,7 @@ type Path<S extends Tuple<PathSegment>> = FilterType<
  */
 export function partial<S extends Tuple<PathSegment>>(
     ...segments: S
-): Filter<Path<S>> {
+): Filter<PathMap<S>> {
     let f = any;
     for (const s of segments) {
         if (s === String) {
@@ -123,7 +123,7 @@ export function partial<S extends Tuple<PathSegment>>(
             f = f.and(segment(s as string));
         }
     }
-    return (f as unknown) as Filter<Path<S>>;
+    return (f as unknown) as Filter<PathMap<S>>;
 }
 
 /**
@@ -144,9 +144,9 @@ export function partial<S extends Tuple<PathSegment>>(
  */
 export function path<S extends Tuple<PathSegment>>(
     ...segments: S
-): Filter<Path<S>> {
+): Filter<PathMap<S>> {
     if (segments.length === 0) {
-        return (end as unknown) as Filter<Path<S>>;
+        return (end as unknown) as Filter<PathMap<S>>;
     }
-    return (partial(...segments).and(end) as unknown) as Filter<Path<S>>;
+    return (partial(...segments).and(end) as unknown) as Filter<PathMap<S>>;
 }

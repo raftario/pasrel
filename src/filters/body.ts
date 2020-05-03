@@ -5,10 +5,10 @@
 
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
+import { IsInstanceOf, Tuple } from "../types";
 import { ParsedUrlQuery, parse as parseUrlEncoded } from "querystring";
 import streamToString, { buffer as streamToBuffer } from "get-stream";
 import Busboy from "busboy";
-import { IsInstanceOf } from "../types";
 import pump from "pump";
 
 /**
@@ -19,7 +19,7 @@ export const raw: Filter<[Buffer]> = filter(async (request) => [
 ]);
 
 /**
- * Extracts the request body as a `string`
+ * Extracts the request body as a string
  */
 export const text: Filter<[string]> = filter(async (request) => [
     await streamToString(request),
@@ -39,12 +39,15 @@ export type JsonSchema =
 /**
  * Schema for JSON body validation and extraction
  */
-export type RootJsonSchema = JsonSchema[] | { [key: string]: JsonSchema };
+export type RootJsonSchema =
+    | Tuple<JsonSchema>
+    | JsonSchema[]
+    | { [key: string]: JsonSchema };
 
 /**
  * Converts a [[`RootJsonSchema`]] to the type it represents
  */
-type Json<S extends RootJsonSchema> = {
+type JsonMap<S extends RootJsonSchema> = {
     [K in keyof S]: true extends IsInstanceOf<string, S[K]>
         ? string
         : true extends IsInstanceOf<number, S[K]>
@@ -52,7 +55,7 @@ type Json<S extends RootJsonSchema> = {
         : true extends IsInstanceOf<boolean, S[K]>
         ? boolean
         : S[K] extends RootJsonSchema
-        ? Json<S[K]>
+        ? JsonMap<S[K]>
         : S[K] extends { optional: true; type: infer T }
         ? T extends JsonSchema
             ? true extends IsInstanceOf<string, T>
@@ -62,32 +65,36 @@ type Json<S extends RootJsonSchema> = {
                 : true extends IsInstanceOf<boolean, T>
                 ? boolean | undefined
                 : T extends RootJsonSchema
-                ? Json<T> | undefined
+                ? JsonMap<T> | undefined
                 : never
             : never
         : never;
 };
 
+type test = JsonMap<[typeof String, typeof Number, typeof Boolean]>;
+
 /** @internal */
-type ActualJson =
+type Json =
     | string
     | number
     | boolean
+    | null
     | undefined
-    | ActualJson[]
-    | { [key: string]: ActualJson };
+    | Json[]
+    | { [key: string]: Json };
 
 /** @internal */
 async function _extractJson(
     keys: string[],
-    schema: JsonSchema,
+    schema: RootJsonSchema | JsonSchema,
     object: unknown,
     extra: boolean
-): Promise<ActualJson> {
+): Promise<Json> {
     const key = keys.join(".");
 
     if (object === undefined || object === null) {
         if (
+            object === undefined &&
             typeof schema === "object" &&
             (schema as { optional: true; type: JsonSchema }).optional === true
         ) {
@@ -129,12 +136,12 @@ async function _extractJson(
             if (schema.length === 0) {
                 return [];
             } else if (schema.length === 1) {
-                const a: ActualJson[] = [];
+                const a: Json[] = [];
                 for (const [i, o] of object.entries()) {
                     a.push(
                         await _extractJson(
                             [...keys, i.toString()],
-                            schema[0],
+                            schema[0] as RootJsonSchema | JsonSchema,
                             o,
                             extra
                         )
@@ -142,12 +149,12 @@ async function _extractJson(
                 }
                 return a;
             } else if (schema.length === object.length) {
-                const a: ActualJson[] = [];
+                const a: Json[] = [];
                 for (const [i, s] of schema.entries()) {
                     a.push(
                         await _extractJson(
                             [...keys, i.toString()],
-                            s,
+                            s as RootJsonSchema | JsonSchema,
                             object[i],
                             extra
                         )
@@ -172,14 +179,14 @@ async function _extractJson(
         }
 
         if (typeof object === "object") {
-            const o: { [key: string]: ActualJson } = extra
-                ? (object as { [key: string]: ActualJson })
+            const o: { [key: string]: Json } = extra
+                ? (object as { [key: string]: Json })
                 : {};
             for (const k in schema) {
                 o[k] = await _extractJson(
                     [...keys, k],
                     (schema as { [key: string]: JsonSchema })[k],
-                    (object as { [key: string]: ActualJson })[k],
+                    (object as { [key: string]: Json })[k],
                     extra
                 );
             }
@@ -216,7 +223,7 @@ async function _extractJson(
 export function json<T extends RootJsonSchema>(
     schema: T,
     extra = false
-): Filter<[Json<T>]> {
+): Filter<[JsonMap<T>]> {
     return filter(async (request) => {
         const text = await streamToString(request);
         let json: unknown;
@@ -225,7 +232,7 @@ export function json<T extends RootJsonSchema>(
         } catch (error) {
             throw reply.text(`Invalid JSON body: ${error}`, 400);
         }
-        return [(await _extractJson([], schema, json, extra)) as Json<T>];
+        return [(await _extractJson([], schema, json, extra)) as JsonMap<T>];
     });
 }
 

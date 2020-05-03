@@ -20,6 +20,7 @@
         "tsdoc/syntax": 1,
 
         "ava/no-ignored-test-files": 0,
+        "ava/no-todo-test": 0,
 
         "unicorn/better-regex": 1,
         "unicorn/error-message": 2,

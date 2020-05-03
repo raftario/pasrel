@@ -26,7 +26,6 @@ test("basic missing header", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 401);
     t.is(reply?.headers["WWW-Authenticate"], 'Basic realm="realm"');
 });
@@ -37,7 +36,6 @@ test("basic wrong scheme", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 401);
     t.is(reply?.headers["WWW-Authenticate"], 'Basic realm="realm"');
 });
@@ -48,7 +46,6 @@ test("basic invalid userpass", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 400);
 });
 
@@ -81,7 +78,6 @@ test("bearer missing both", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 401);
     t.is(
         reply?.headers["WWW-Authenticate"],
@@ -98,7 +94,6 @@ test("bearer wrong scheme", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 401);
     t.is(
         reply?.headers["WWW-Authenticate"],
@@ -116,7 +111,6 @@ test("bearer header and query", async (t) => {
 
     const reply = asReply(await macros.rej(t, filter, request));
 
-    t.not(reply, undefined);
     t.is(reply?.status, 400);
     t.true(
         reply?.headers["WWW-Authenticate"]

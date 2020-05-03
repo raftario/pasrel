@@ -13,6 +13,10 @@ class RequestBuilder {
 
     constructor(method: string, path = "/") {
         const inner = new Readable();
+        inner._read = (): void => {
+            // eslint-disable-next-line unicorn/no-null
+            this.inner.push(null);
+        };
 
         (inner as IncomingMessage).aborted = false;
         (inner as IncomingMessage).complete = true;
@@ -51,7 +55,7 @@ class RequestBuilder {
         return this;
     }
 
-    body(body: Buffer): RequestBuilder {
+    raw(body: Buffer): RequestBuilder {
         this.inner._read = (): void => {
             this.inner.push(body);
             // eslint-disable-next-line unicorn/no-null
