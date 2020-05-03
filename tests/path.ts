@@ -86,3 +86,54 @@ test("end invalid", async (t) => {
 
     t.is(reply?.status, 404);
 });
+
+test("partial valid", async (t) => {
+    const filter = path.partial("s", String, "n", Number, "b", Boolean);
+    const value = ["string", 666, true];
+    const request = mock
+        .get(`/s/${value[0]}/n/${value[1]}/b/${value[2]}/hello`)
+        .build();
+
+    const result = await filter.run(request, 0);
+
+    t.deepEqual(result.tuple, value);
+});
+
+test("partial invalid", async (t) => {
+    const filter = path.partial("s", String, "n", Number, "b", Boolean);
+    const request = mock.get(`/s/true/n/string/b/666/hello`).build();
+
+    const reply = asReply(await macros.rej(t, filter, request));
+
+    t.is(reply?.status, 404);
+});
+
+test("path valid", async (t) => {
+    const filter = path.path("s", String, "n", Number, "b", Boolean);
+    const value = ["string", 666, true];
+    const request = mock
+        .get(`/s/${value[0]}/n/${value[1]}/b/${value[2]}`)
+        .build();
+
+    const result = await filter.run(request, 0);
+
+    t.deepEqual(result.tuple, value);
+});
+
+test("path no end", async (t) => {
+    const filter = path.path("s", String, "n", Number, "b", Boolean);
+    const request = mock.get(`/s/string/n/666/b/true/hello`).build();
+
+    const reply = asReply(await macros.rej(t, filter, request));
+
+    t.is(reply?.status, 404);
+});
+
+test("path invalid", async (t) => {
+    const filter = path.path("s", String, "n", Number, "b", Boolean);
+    const request = mock.get(`/s/true/n/string/b/666/hello`).build();
+
+    const reply = asReply(await macros.rej(t, filter, request));
+
+    t.is(reply?.status, 404);
+});
