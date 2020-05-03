@@ -6,7 +6,7 @@ A typed, composable and functional web server framework totally ripped off [sean
 
 `pasrel` is yet another Node.js web server framework. However, unlike most other frameworks, it doesn't use express-like route handlers or LoopBack-like controllers. The basic building blocks of `pasrel` are `Filter`s, small functions that can be combined in different ways to create routes, ~~totally ripped off~~ strongly inspired by [warp](https://github.com/seanmonstar/warp).
 
-`pasrel` is fully written in TypeScript and leverages its powerful type system (with some help from [ts-toolbelt](https://github.com/pirix-gh/ts-toolbelt)) to provide type safety and excellent editor support. The framework can be used in both TypeScript and JavaScript but TypeScript is highly recommended.
+`pasrel` is fully written in TypeScript and leverages its powerful type system (with some help from [ts-toolbelt](https://github.com/pirix-gh/ts-toolbelt)) to provide type safety and excellent editor support. It can be used with both TypeScript and JavaScript but TypeScript is highly recommended since filters can be hard to reason about and error prone without types.
 
 ## Features
 
@@ -24,7 +24,7 @@ Out of the box, `pasrel` provides filters for
 -   Basic and Bearer authentication
 -   Temporary and permanent redirections
 
-You can easily create new filters by combining the provided ones or from scratch.
+You can easily create new filters by combining existing ones or from scratch.
 
 ## Example
 
