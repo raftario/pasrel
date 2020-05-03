@@ -29,11 +29,13 @@
         "busboy": "^0.3",
         "get-stream": "^5",
         "mime": "^2",
+        "pump": "^3",
         "ts-toolbelt": "^6"
     },
     "devDependencies": {
         "@types/busboy": "^0.2.3",
         "@types/mime": "^2.0.1",
+        "@types/pump": "^1.1.0",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "@typescript-eslint/parser": "^2.30.0",
         "ava": "^3.8.1",

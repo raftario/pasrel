@@ -9,6 +9,7 @@ import { ParsedUrlQuery, parse as parseUrlEncoded } from "querystring";
 import streamToString, { buffer as streamToBuffer } from "get-stream";
 import Busboy from "busboy";
 import { IsInstanceOf } from "../types";
+import pump from "pump";
 
 /**
  * Extracts the raw request body as a `Buffer`
@@ -371,7 +372,11 @@ export const multipart: Filter<[FormData]> = filter(
                 );
 
                 busboy.on("finish", () => res([result]));
-                request.pipe(busboy);
+                pump(request, busboy, (err) => {
+                    if (err) {
+                        rej(err);
+                    }
+                });
             } catch (err) {
                 rej(reply.text("Invalid multipart body", 400));
             }
