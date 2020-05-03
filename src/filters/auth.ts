@@ -69,9 +69,9 @@ export function basic(realm: string): Filter<[Credentials]> {
  */
 export function bearer(realm: string, scopes?: string[]): Filter<[string]> {
     return filter(async (request) => {
-        const wwwa = `Basic realm="${realm}${
+        const wwwa = `Bearer realm="${realm}"${
             scopes !== undefined ? `, scope="${scopes.join(" ")}"` : ""
-        }"`;
+        }`;
 
         const auth = request.headers.authorization;
         if (auth !== undefined && !auth.startsWith("Bearer ")) {
