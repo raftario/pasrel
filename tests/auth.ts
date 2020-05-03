@@ -1,7 +1,6 @@
 import * as auth from "../src/filters/auth";
-import { Reply } from "../src";
+import { macros, mock } from "./_utils";
 import { asReply } from "../src/error";
-import { mock } from "./_utils";
 import test from "ava";
 
 test("basic valid", async (t) => {
@@ -25,12 +24,7 @@ test("basic missing header", async (t) => {
     const filter = auth.basic("realm");
     const request = mock.get().build();
 
-    let reply: Reply | undefined;
-    try {
-        await filter.run(request, 0);
-    } catch (err) {
-        reply = asReply(err);
-    }
+    const reply = asReply(await macros.rej(t, filter, request));
 
     t.not(reply, undefined);
     t.is(reply?.status, 401);
@@ -41,12 +35,7 @@ test("basic wrong scheme", async (t) => {
     const filter = auth.basic("realm");
     const request = mock.get().header("authorization", "Bearer token").build();
 
-    let reply: Reply | undefined;
-    try {
-        await filter.run(request, 0);
-    } catch (err) {
-        reply = asReply(err);
-    }
+    const reply = asReply(await macros.rej(t, filter, request));
 
     t.not(reply, undefined);
     t.is(reply?.status, 401);
@@ -57,12 +46,7 @@ test("basic invalid userpass", async (t) => {
     const filter = auth.basic("realm");
     const request = mock.get().header("authorization", "Basic invalid").build();
 
-    let reply: Reply | undefined;
-    try {
-        await filter.run(request, 0);
-    } catch (err) {
-        reply = asReply(err);
-    }
+    const reply = asReply(await macros.rej(t, filter, request));
 
     t.not(reply, undefined);
     t.is(reply?.status, 400);
@@ -91,6 +75,20 @@ test("bearer valid query", async (t) => {
     t.is(result.tuple[0], token);
 });
 
+test("bearer missing both", async (t) => {
+    const filter = auth.bearer("realm", ["scope"]);
+    const request = mock.get().build();
+
+    const reply = asReply(await macros.rej(t, filter, request));
+
+    t.not(reply, undefined);
+    t.is(reply?.status, 401);
+    t.is(
+        reply?.headers["WWW-Authenticate"],
+        'Bearer realm="realm", scope="scope"'
+    );
+});
+
 test("bearer wrong scheme", async (t) => {
     const filter = auth.bearer("realm", ["scope"]);
     const request = mock
@@ -98,12 +96,7 @@ test("bearer wrong scheme", async (t) => {
         .header("authorization", "Basic user:password")
         .build();
 
-    let reply: Reply | undefined;
-    try {
-        await filter.run(request, 0);
-    } catch (err) {
-        reply = asReply(err);
-    }
+    const reply = asReply(await macros.rej(t, filter, request));
 
     t.not(reply, undefined);
     t.is(reply?.status, 401);
@@ -121,13 +114,15 @@ test("bearer header and query", async (t) => {
         .header("authorization", `Bearer ${token}`)
         .build();
 
-    let reply: Reply | undefined;
-    try {
-        await filter.run(request, 0);
-    } catch (err) {
-        reply = asReply(err);
-    }
+    const reply = asReply(await macros.rej(t, filter, request));
 
     t.not(reply, undefined);
     t.is(reply?.status, 400);
+    t.true(
+        reply?.headers["WWW-Authenticate"]
+            ?.toString()
+            .startsWith(
+                'Bearer realm="realm", scope="scope", error="invalid_request"'
+            )
+    );
 });

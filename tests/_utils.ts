@@ -1,6 +1,12 @@
+/* eslint-disable ava/use-test */
+
 import { IncomingHttpHeaders, IncomingMessage } from "http";
+import { Error } from "../src/error";
+import { ExecutionContext } from "ava";
+import { Filter } from "../src/filter";
 import { Readable } from "stream";
 import { Request } from "../src";
+import { Tuple } from "../src/types";
 
 class RequestBuilder {
     private readonly inner: Request;
@@ -96,3 +102,21 @@ function patch(path?: string): RequestBuilder {
 }
 
 export const mock = { get, head, post, put, del, patch };
+
+async function rej<T extends Tuple>(
+    t: ExecutionContext,
+    filter: Filter<T>,
+    request: Request,
+    depth = 0
+): Promise<Error> {
+    let error: Error | undefined;
+    try {
+        await filter.run(request, depth);
+    } catch (err) {
+        error = err;
+    }
+    t.not(error, undefined);
+    return error!;
+}
+
+export const macros = { rej };

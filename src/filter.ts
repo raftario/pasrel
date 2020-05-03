@@ -10,7 +10,7 @@ import { Request } from ".";
 /**
  * Return type of [[`FilterFn`]]
  */
-type FilterRet<T extends Tuple> = {
+export type FilterRet<T extends Tuple> = {
     /**
      * Extracted variables
      */
@@ -25,7 +25,7 @@ type FilterRet<T extends Tuple> = {
  *
  * @typeParam T - Extracted variables
  */
-type FilterFn<T extends Tuple> = (
+export type FilterFn<T extends Tuple> = (
     request: Request,
     depth: number
 ) => Promise<FilterRet<T>>;
