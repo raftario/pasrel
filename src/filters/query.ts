@@ -5,7 +5,7 @@
 
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
-import { Class } from "ts-toolbelt";
+import { IsInstanceOf } from "../types";
 import { _urlFromRequest } from "./url";
 
 /**
@@ -26,21 +26,17 @@ export type QuerySchema = {
  * Converts a [[`QuerySchema`]] to the type it represents
  */
 type Query<S extends QuerySchema> = {
-    [K in keyof S]: S[K] extends Class.Class
-        ? string extends Class.InstanceOf<S[K]>
-            ? string
-            : number extends Class.InstanceOf<S[K]>
-            ? number
-            : boolean extends Class.InstanceOf<S[K]>
-            ? boolean
-            : never
+    [K in keyof S]: true extends IsInstanceOf<string, S[K]>
+        ? string
+        : true extends IsInstanceOf<number, S[K]>
+        ? number
+        : true extends IsInstanceOf<boolean, S[K]>
+        ? boolean
         : S[K] extends { optional: true; type: infer T }
-        ? T extends Class.Class
-            ? string extends Class.InstanceOf<T>
-                ? string
-                : number extends Class.InstanceOf<T>
-                ? number
-                : never
+        ? true extends IsInstanceOf<string, T>
+            ? string | undefined
+            : true extends IsInstanceOf<number, T>
+            ? number | undefined
             : never
         : never;
 };

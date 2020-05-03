@@ -24,12 +24,7 @@
         "unicorn/better-regex": 1,
         "unicorn/error-message": 2,
         "unicorn/explicit-length-check": 2,
-        "unicorn/filename-case": [
-            2,
-            {
-                "case": "camelCase"
-            }
-        ],
+        "unicorn/filename-case": 2,
         "unicorn/import-index": 1,
         "unicorn/new-for-builtins": 2,
         "unicorn/no-abusive-eslint-disable": 2,

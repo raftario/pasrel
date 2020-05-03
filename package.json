@@ -4,9 +4,9 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "author": "Raphaël Thériault <raphael_theriault@outlook.com>",
-    "description": "A typed, composable, web server framework totally ripped off seanmonstar's warp",
+    "description": "A typed, composable and functional web server framework",
     "license": "MIT",
-    "homepage": "https://github.com/raftario/pasrel#readme",
+    "homepage": "https://raftario.github.io/pasrel/",
     "bugs": "https://github.com/raftario/pasrel/issues",
     "repository": "raftario/pasrel",
     "files": [
@@ -17,18 +17,19 @@
     },
     "scripts": {
         "build": "tsc",
+        "build:examples": "tsc -p examples",
         "test": "ava tests/**/*.ts",
         "lint:fix": "eslint --fix src/**/*.ts && prettier --write **/*.{json,md,yml}",
         "lint:check": "eslint src/**/*.ts && prettier --check **/*.{json,md,yml}",
         "doc": "typedoc --out docs src",
-        "prepublishOnly": "yarn lint && yarn build"
+        "prepublishOnly": "yarn test && yarn lint:check && yarn build"
     },
     "dependencies": {
-        "@types/node": "^13.13.4",
-        "busboy": "^0.3.1",
-        "get-stream": "^5.1.0",
-        "mime": "^2.4.4",
-        "ts-toolbelt": "^6.5.1"
+        "@types/node": "*",
+        "busboy": "^0.3",
+        "get-stream": "^5",
+        "mime": "^2",
+        "ts-toolbelt": "^6"
     },
     "devDependencies": {
         "@types/busboy": "^0.2.3",

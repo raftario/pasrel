@@ -7,8 +7,8 @@
  */
 
 import * as reply from "../reply";
-import { Class, List } from "ts-toolbelt";
-import { Filter, Finite } from "../filter";
+import { Filter as FilterType, IsInstanceOf, Tuple } from "../types";
+import { Filter } from "../filter";
 import { any } from "..";
 
 /**
@@ -84,21 +84,18 @@ export const end: Filter<[]> = new Filter(async (request, depth) => {
 type PathSegment = string | typeof String | typeof Number | typeof Boolean;
 
 /**
- * Converts [[`PathSegment`]]s to their counterpart extracted types
+ * Maps [[`PathSegment`]]s to their counterpart extracted types
  */
-type Path<S extends PathSegment[]> = List.Filter<
+type Path<S extends Tuple<PathSegment>> = FilterType<
     {
-        [I in keyof S]: S[I] extends Class.Class
-            ? string extends Class.InstanceOf<S[I]>
-                ? string
-                : number extends Class.InstanceOf<S[I]>
-                ? number
-                : boolean extends Class.InstanceOf<S[I]>
-                ? boolean
-                : never
+        [I in keyof S]: true extends IsInstanceOf<string, S[I]>
+            ? string
+            : true extends IsInstanceOf<number, S[I]>
+            ? number
+            : true extends IsInstanceOf<boolean, S[I]>
+            ? boolean
             : null;
-    },
-    null
+    }
 >;
 
 /**
@@ -111,22 +108,22 @@ type Path<S extends PathSegment[]> = List.Filter<
  *
  * @param segments - Path segments (must have a known length)
  */
-export function partial<S extends PathSegment[]>(
+export function partial<S extends Tuple<PathSegment>>(
     ...segments: S
-): Filter<Finite<Path<S>>> {
-    let f: Filter<unknown[]> = any;
+): Filter<Path<S>> {
+    let f = any;
     for (const s of segments) {
         if (s === String) {
-            f = f.and(string);
+            f = (f.and(string) as unknown) as Filter<[]>;
         } else if (s === Number) {
-            f = f.and(number);
+            f = (f.and(number) as unknown) as Filter<[]>;
         } else if (s === Boolean) {
-            f = f.and(boolean);
+            f = (f.and(boolean) as unknown) as Filter<[]>;
         } else {
             f = f.and(segment(s as string));
         }
     }
-    return (f as unknown) as Filter<Finite<Path<S>>>;
+    return (f as unknown) as Filter<Path<S>>;
 }
 
 /**
@@ -145,13 +142,11 @@ export function partial<S extends PathSegment[]>(
  *
  * @param segments - Path segments (must have a known length)
  */
-export function path<S extends PathSegment[]>(
+export function path<S extends Tuple<PathSegment>>(
     ...segments: S
-): Filter<Finite<Path<S>>> {
+): Filter<Path<S>> {
     if (segments.length === 0) {
-        return (end as unknown) as Filter<Finite<Path<S>>>;
+        return (end as unknown) as Filter<Path<S>>;
     }
-    return (partial(...segments).and(end) as unknown) as Filter<
-        Finite<Path<S>>
-    >;
+    return (partial(...segments).and(end) as unknown) as Filter<Path<S>>;
 }

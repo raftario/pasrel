@@ -11,9 +11,9 @@ jobs:
             - name: Install dependencies
               run: yarn
             - name: Build main library
-              run: yarn tsc
+              run: yarn build
             - name: Build examples
-              run: yarn tsc -p examples
+              run: yarn build:examples
     test:
         runs-on: ubuntu-latest
         strategy:

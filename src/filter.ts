@@ -3,34 +3,9 @@
  * @packageDocumentation
  */
 
+import { Concat, Tuple } from "./types";
 import { Error, asError } from "./error";
-import { List } from "ts-toolbelt";
 import { Request } from ".";
-
-/**
- * A tuple
- */
-export type Tuple = readonly unknown[];
-
-/**
- * Checks that the given tuple has a known length
- *
- * @typeParam T - Tuple
- *
- * @returns `T` if `T` has a known lenght, `never` otherwise
- */
-export type Finite<T extends Tuple> = number extends T["length"] ? never : T;
-/**
- * Concatenates two tuples
- *
- * @typeParam T - Left tuple
- * @typeParam U - Right tuple
- *
- * @returns Concatenation of `T` and `U` if both have a known length, `never` otherwise
- */
-export type Concat<T extends Tuple, U extends Tuple> = Finite<
-    List.Concat<T, U>
->;
 
 /**
  * Return type of [[`FilterFn`]]
@@ -143,16 +118,16 @@ export class Filter<T extends Tuple> {
      *
      * @param fn - Mapping function
      */
-    map<U extends Tuple>(fn: Map<T, U>): Filter<Finite<U>> {
+    map<U extends Tuple>(fn: Map<T, U>): Filter<U> {
         return new Filter(async (request, depth) => {
             const args = (await this.run(request, depth)).tuple;
             const f = await fn(...args);
-            if (typeof f === "function") {
-                return { tuple: await f(request), depth };
+            if (f instanceof Filter) {
+                return f.run(request, depth);
             } else {
                 return { tuple: f, depth };
             }
-        }, this.weight + 1) as Filter<Finite<U>>;
+        }, this.weight + 1);
     }
 
     /**
@@ -194,7 +169,7 @@ export class Filter<T extends Tuple> {
  */
 export type Map<T extends Tuple, U extends Tuple> = (
     ...args: T
-) => Promise<((request: Request) => Promise<U>) | U>;
+) => Promise<Filter<U> | U>;
 
 /**
  * Recovery function used to recover from errors
@@ -225,7 +200,7 @@ export type With<T extends Tuple> = (filter: Filter<T>) => Promise<Filter<T>>;
 export function filter<T extends Tuple>(
     fn: (request: Request) => Promise<T>,
     weight?: number
-): Filter<Finite<T>>;
+): Filter<T>;
 /**
  * Creates a new filter immediately extracting the provided variables
  *
@@ -234,14 +209,11 @@ export function filter<T extends Tuple>(
  * @param value - Extracted variables
  * @param weight - Weight of the filter (defaults to 0)
  */
-export function filter<T extends Tuple>(
-    value: T,
-    weight?: number
-): Filter<Finite<T>>;
+export function filter<T extends Tuple>(value: T, weight?: number): Filter<T>;
 export function filter<T extends Tuple>(
     arg: ((request: Request) => Promise<T>) | T,
     weight = 1
-): Filter<Finite<T>> {
+): Filter<T> {
     if (typeof arg === "function") {
         return new Filter(
             async (request, depth) => ({
@@ -249,7 +221,7 @@ export function filter<T extends Tuple>(
                 depth,
             }),
             weight
-        ) as Filter<Finite<T>>;
+        );
     } else {
         return new Filter(
             async (request, depth) => ({
@@ -257,6 +229,6 @@ export function filter<T extends Tuple>(
                 depth,
             }),
             weight
-        ) as Filter<Finite<T>>;
+        );
     }
 }

@@ -8,7 +8,7 @@ import { Filter, filter } from "../filter";
 import { ParsedUrlQuery, parse as parseUrlEncoded } from "querystring";
 import streamToString, { buffer as streamToBuffer } from "get-stream";
 import Busboy from "busboy";
-import { Class } from "ts-toolbelt";
+import { IsInstanceOf } from "../types";
 
 /**
  * Extracts the raw request body as a `Buffer`
@@ -44,26 +44,22 @@ export type RootJsonSchema = JsonSchema[] | { [key: string]: JsonSchema };
  * Converts a [[`RootJsonSchema`]] to the type it represents
  */
 type Json<S extends RootJsonSchema> = {
-    [K in keyof S]: S[K] extends Class.Class
-        ? string extends Class.InstanceOf<S[K]>
-            ? string
-            : number extends Class.InstanceOf<S[K]>
-            ? number
-            : boolean extends Class.InstanceOf<S[K]>
-            ? boolean
-            : never
+    [K in keyof S]: true extends IsInstanceOf<string, S[K]>
+        ? string
+        : true extends IsInstanceOf<number, S[K]>
+        ? number
+        : true extends IsInstanceOf<boolean, S[K]>
+        ? boolean
         : S[K] extends RootJsonSchema
         ? Json<S[K]>
         : S[K] extends { optional: true; type: infer T }
         ? T extends JsonSchema
-            ? T extends Class.Class
-                ? string extends Class.InstanceOf<T>
-                    ? string | undefined
-                    : number extends Class.InstanceOf<T>
-                    ? string | undefined
-                    : boolean extends Class.InstanceOf<T>
-                    ? string | undefined
-                    : never
+            ? true extends IsInstanceOf<string, T>
+                ? string | undefined
+                : true extends IsInstanceOf<number, T>
+                ? number | undefined
+                : true extends IsInstanceOf<boolean, T>
+                ? boolean | undefined
                 : T extends RootJsonSchema
                 ? Json<T> | undefined
                 : never
