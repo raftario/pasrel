@@ -9,13 +9,7 @@ import { Request } from "..";
 
 /** @internal */
 function _getHeader(name: string, request: Request): string | undefined {
-    const lname = name.toLowerCase();
-    for (const [n, v] of Object.entries(request.headers)) {
-        if (n.toLowerCase() === lname) {
-            return v?.toString();
-        }
-    }
-    return undefined;
+    return request.headers[name.toLowerCase()]?.toString();
 }
 
 /**

@@ -1,9 +1,9 @@
 /* eslint-disable ava/use-test */
 
-import { IncomingHttpHeaders, IncomingMessage } from "http";
 import { Error } from "../src/error";
 import { ExecutionContext } from "ava";
 import { Filter } from "../src/filter";
+import { IncomingMessage } from "http";
 import { Readable } from "stream";
 import { Request } from "../src";
 import { Tuple } from "../src/types";
@@ -43,15 +43,8 @@ class RequestBuilder {
         this.inner = inner as Request;
     }
 
-    header<N extends keyof IncomingHttpHeaders>(
-        name: N,
-        value: string
-    ): RequestBuilder {
-        this.inner.headers[name] = value;
-        return this;
-    }
-    headers(headers: IncomingHttpHeaders): RequestBuilder {
-        this.inner.headers = headers;
+    header(name: string, value: string): RequestBuilder {
+        this.inner.headers[name.toLowerCase()] = value;
         return this;
     }
 
