@@ -20,7 +20,7 @@ Out of the box, `pasrel` provides filters for
 -   Query string and JSON body validation
 -   Static files and directories
 -   Logging
--   Content-Type negotiation
+-   Content type negotiation
 -   Basic and Bearer authentication
 -   Temporary and permanent redirections
 
