@@ -185,6 +185,26 @@ test("json invalid complex", async (t) => {
     t.is(reply?.status, 400);
 });
 
+test("json array valid", async (t) => {
+    const filter = body.json([Number]);
+    const b = [0, 1, 2, 3];
+    const request = mock.post().json(b).build();
+
+    const result = await filter.run(request, 0);
+
+    t.deepEqual(result.tuple[0], b);
+});
+
+test("json array invalid", async (t) => {
+    const filter = body.json([Number]);
+    const b = [0, 1, 2, "3"];
+    const request = mock.post().json(b).build();
+
+    const reply = asReply(await macros.rej(t, filter, request));
+
+    t.is(reply?.status, 400);
+});
+
 test("json any valid", async (t) => {
     const filter = body.anyJson;
     const b = { s: "string" };
