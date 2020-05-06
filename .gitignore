@@ -2,4 +2,6 @@
 dist/
 *.tsbuildinfo
 
+package-lock.json
+
 /docs/

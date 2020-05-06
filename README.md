@@ -46,3 +46,16 @@ serve(hello).run(3030).catch(console.error);
 ```
 
 For more information you can check the [docs](https://raftario.github.io/pasrel/modules/_index_.html) or the [examples](./examples/). You can also look at the [built-in filters](./src/filters/) for more complex usecases.
+
+## Contributing
+
+All kinds of contributions are welcome ! Just try to keep dependencies to a minimum and write a couple tests. If you don't think a filter should be built-in but would still be useful for a couple people, you can also add it to the examples (examples are also not affected by the keep-dependencies-to-a-minimum rule).
+
+Here are a couple useful commands for contributors
+
+-   `yarn build` - Builds the main library
+-   `yarn build:examples` - Builds the examples
+-   `yarn test` - Runs the test suite
+-   `yarn lint:fix` - Runs the linters and automatically fixes errors that can be fixed
+-   `yarn lint:check` - Runs the linters and check for errors without fixing them
+-   `yarn doc` - Builds the documentation to the [`docs`](./docs/) directory
