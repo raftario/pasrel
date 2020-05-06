@@ -7,7 +7,7 @@ test("get get", async (t) => {
     const filter = method.get;
     const request = mock.get().build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -16,7 +16,7 @@ test("get head", async (t) => {
     const filter = method.get;
     const request = mock.head().build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });

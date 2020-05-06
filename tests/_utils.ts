@@ -104,11 +104,12 @@ async function rej<T extends Tuple>(
     t: ExecutionContext,
     filter: Filter<T>,
     request: Request,
+    weight = 0,
     depth = 0
 ): Promise<Error> {
     let error: Error | undefined;
     try {
-        await filter.run(request, depth);
+        await filter.run(request, weight, depth);
     } catch (err) {
         error = err;
     }

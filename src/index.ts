@@ -1,4 +1,4 @@
-import { Filter, With } from "./filter";
+import { Filter, With, filter } from "./filter";
 import {
     ServerOptions as HttpOptions,
     Server as HttpServer,
@@ -111,7 +111,7 @@ export class Server {
                     .filter((s) => s !== "");
 
                 filter
-                    .run(pRequest, 0)
+                    .run(pRequest, 0, 0)
                     .then(({ tuple: [reply] }) =>
                         writeReply(reply, response, hasBody)
                     )
@@ -235,7 +235,4 @@ export function serve(
 /**
  * A filter that matches any request
  */
-export const any: Filter<[]> = new Filter(
-    async (request, depth) => ({ tuple: [], depth }),
-    0
-);
+export const any: Filter<[]> = filter([]);

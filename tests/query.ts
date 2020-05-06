@@ -8,7 +8,7 @@ test("query valid", async (t) => {
     const q = { s: "string", n: 2, b: true };
     const request = mock.get("/?s=string&n=2&b").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], q);
 });
@@ -33,7 +33,7 @@ test("query valid complex", async (t) => {
     const q = { s: "string", n: 2, b: true, os: undefined, on: 2 };
     const request = mock.get("/?s=string&n=2&b&on=2").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], q);
 });

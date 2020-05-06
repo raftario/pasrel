@@ -7,7 +7,7 @@ test("segment valid", async (t) => {
     const filter = path.segment("segment");
     const request = mock.get("/segment").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -26,7 +26,7 @@ test("string", async (t) => {
     const value = "string";
     const request = mock.get(`/${value}`).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], value);
 });
@@ -36,7 +36,7 @@ test("number valid", async (t) => {
     const value = 666;
     const request = mock.get(`/${value}`).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], value);
 });
@@ -55,7 +55,7 @@ test("boolean valid", async (t) => {
     const value = true;
     const request = mock.get(`/${value}`).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], value);
 });
@@ -73,7 +73,7 @@ test("end valid", async (t) => {
     const filter = path.end;
     const request = mock.get(`/`).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -94,7 +94,7 @@ test("partial valid", async (t) => {
         .get(`/s/${value[0]}/n/${value[1]}/b/${value[2]}/hello`)
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, value);
 });
@@ -115,7 +115,7 @@ test("path valid", async (t) => {
         .get(`/s/${value[0]}/n/${value[1]}/b/${value[2]}`)
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, value);
 });

@@ -8,7 +8,7 @@ test("optional present", async (t) => {
     const value = "value";
     const request = mock.get().header("optional-Header", value).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], value);
 });
@@ -17,7 +17,7 @@ test("optional absent", async (t) => {
     const filter = header.optional("Optional-Header");
     const request = mock.get().build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], undefined);
 });
@@ -27,7 +27,7 @@ test("required present", async (t) => {
     const value = "value";
     const request = mock.get().header("required-Header", value).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], value);
 });
@@ -46,7 +46,7 @@ test("exact valid", async (t) => {
     const filter = header.exact("Exact-header", value);
     const request = mock.get().header("exact-Header", value).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });

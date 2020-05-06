@@ -16,11 +16,11 @@ import { _urlFromRequest } from "./url";
  * @param f - Filter
  */
 export const logger: With<[Reply]> = async (f) =>
-    new Filter(async (request, depth) => {
+    new Filter(async (request, weight, depth) => {
         const startDate = new Date();
         const [startSecs, startNanos] = process.hrtime();
 
-        const reply = (await f.run(request, depth)).tuple[0];
+        const reply = (await f.run(request, weight, depth)).tuple[0];
         const status = reply.status;
         const [endSecs, endNanos] = process.hrtime();
 
@@ -38,5 +38,5 @@ export const logger: With<[Reply]> = async (f) =>
             )} us)`
         );
 
-        return { tuple: [reply], depth };
-    }, 0);
+        return { tuple: [reply], weight, depth };
+    });

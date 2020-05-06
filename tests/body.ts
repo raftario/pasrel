@@ -9,7 +9,7 @@ test("raw", async (t) => {
     const b = Buffer.from([0, 1, 2, 3]);
     const request = mock.post().raw(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -18,7 +18,7 @@ test("raw empty", async (t) => {
     const filter = body.raw;
     const request = mock.post().build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], Buffer.from([]));
 });
@@ -28,7 +28,7 @@ test("text", async (t) => {
     const b = "string";
     const request = mock.post().text(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], b);
 });
@@ -37,7 +37,7 @@ test("text empty", async (t) => {
     const filter = body.text;
     const request = mock.post().build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], "");
 });
@@ -47,7 +47,7 @@ test("json valid object", async (t) => {
     const b = { s: "string", n: 2, b: true };
     const request = mock.post().json(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -57,7 +57,7 @@ test("json valid array", async (t) => {
     const b = ["string", 2, true];
     const request = mock.post().json(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -89,8 +89,8 @@ test("json extra", async (t) => {
     const r1 = mock.post().json(b).build();
     const r2 = mock.post().json(b).build();
 
-    const extraResult = await extra.run(r1, 0);
-    const noextraResult = await noextra.run(r2, 0);
+    const extraResult = await extra.run(r1, 0, 0);
+    const noextraResult = await noextra.run(r2, 0, 0);
 
     t.deepEqual(extraResult.tuple[0], b);
     t.notDeepEqual(noextraResult.tuple[0], b);
@@ -152,7 +152,7 @@ test("json valid complex", async (t) => {
     };
     const request = mock.post().json(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -190,7 +190,7 @@ test("json array valid", async (t) => {
     const b = [0, 1, 2, 3];
     const request = mock.post().json(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -210,7 +210,7 @@ test("json any valid", async (t) => {
     const b = { s: "string" };
     const request = mock.post().json(b).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });
@@ -229,7 +229,7 @@ test("form", async (t) => {
     const b = { s: "string" };
     const request = mock.post().text(qs.encode(b)).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], b);
 });

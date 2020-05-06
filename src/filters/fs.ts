@@ -8,6 +8,7 @@ import * as nodePath from "path";
 import * as reply from "../reply";
 import { Filter, filter } from "../filter";
 import { Reply } from "..";
+import { asError } from "../error";
 import { getType } from "mime";
 
 /** @internal */
@@ -93,12 +94,17 @@ export function file(path: string): Filter<[Reply]> {
  * @param index - Whether to look for an `index.html` file in a directory when the directory itself is requested
  */
 export function directory(path: string, index = true): Filter<[Reply]> {
-    return new Filter(async (request, depth) => {
+    return new Filter(async (request, weight, depth) => {
         const relPath = request.pathSegments.slice(depth);
         const fullPath = nodePath.join(path, ...relPath);
-        return {
-            tuple: await _readToReply(fullPath, index),
-            depth: depth + relPath.length,
-        };
-    }, 1);
+        try {
+            return {
+                tuple: await _readToReply(fullPath, index),
+                weight: weight + 1,
+                depth: depth + relPath.length,
+            };
+        } catch (err) {
+            throw asError(err, weight + 1);
+        }
+    });
 }

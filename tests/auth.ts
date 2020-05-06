@@ -15,7 +15,7 @@ test("basic valid", async (t) => {
     ).toString("base64")}`;
     const request = mock.get().header("authorization", header).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple[0], credentials);
 });
@@ -57,7 +57,7 @@ test("bearer valid header", async (t) => {
         .header("authorization", `Bearer ${token}`)
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], token);
 });
@@ -67,7 +67,7 @@ test("bearer valid query", async (t) => {
     const token = "token";
     const request = mock.get(`/?access_token=${token}`).build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.is(result.tuple[0], token);
 });

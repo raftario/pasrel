@@ -7,7 +7,7 @@ test("accepts any valid", async (t) => {
     const filter = type.accepts("*/*");
     const request = mock.get().header("Accept", "*/*").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -25,7 +25,7 @@ test("accepts text valid", async (t) => {
     const filter = type.accepts("text/*");
     const request = mock.get().header("Accept", "text/*").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -43,7 +43,7 @@ test("accepts html valid", async (t) => {
     const filter = type.accepts("text/html");
     const request = mock.get().header("Accept", "text/html").build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -64,7 +64,7 @@ test("is any", async (t) => {
         .header("Content-Type", "application/json")
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -76,7 +76,7 @@ test("is application valid", async (t) => {
         .header("Content-Type", "application/json")
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
@@ -97,7 +97,7 @@ test("is json valid", async (t) => {
         .header("Content-Type", "application/json")
         .build();
 
-    const result = await filter.run(request, 0);
+    const result = await filter.run(request, 0, 0);
 
     t.deepEqual(result.tuple, []);
 });
