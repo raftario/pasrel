@@ -4,13 +4,17 @@ A typed, composable and functional web server framework totally ripped off [sean
 
 [![CI](https://img.shields.io/github/workflow/status/raftario/pasrel/Build%20&%20Test?label=ci&style=flat-square)](https://github.com/raftario/pasrel/actions?query=workflow%3A%22Build+%26+Test%22) ![License](https://img.shields.io/github/license/raftario/pasrel?style=flat-square) [![npm](https://img.shields.io/npm/v/pasrel?style=flat-square)](https://www.npmjs.com/package/pasrel) [![Documentation](https://img.shields.io/badge/docs-typedoc-informational?style=flat-square)](https://raftario.github.io/pasrel/modules/_index_.html)
 
-`pasrel` is yet another Node.js web server framework. However, unlike most other frameworks, it doesn't use express-like route handlers or LoopBack-like controllers. The basic building blocks of `pasrel` are `Filter`s, small functions that can be combined in different ways to create routes, ~~totally ripped off~~ strongly inspired by [warp](https://github.com/seanmonstar/warp).
+`pasrel` is yet another Node.js web server framework. However, unlike most other frameworks, it doesn't use express-like route handlers or LoopBack-like controllers. The basic building blocks of the framework are `Filter`s, small functions that can be combined in different ways to create routes, ~~totally ripped off~~ strongly inspired by [warp](https://github.com/seanmonstar/warp).
 
 `pasrel` is fully written in TypeScript and leverages its powerful type system (with some help from [ts-toolbelt](https://github.com/pirix-gh/ts-toolbelt)) to provide type safety and excellent editor support. It can be used with both TypeScript and JavaScript but TypeScript is highly recommended since filters can be hard to reason about and error prone without types.
 
+### Disclaimer
+
+You shouldn't use `pasrel` in production, it hasn't been extensovely tested and, at this stage, is just a fun side project of mine to play around with various stuff.
+
 ## Features
 
-Out of the box, `pasrel` provides filters for
+Out of the box, there are provided filters for
 
 -   Path routing and parameter extraction
 -   Header requirement and extration
