@@ -45,4 +45,4 @@ const hello = path
 serve(hello).run(3030).catch(console.error);
 ```
 
-For more information you can check the [docs](https://raftario.github.io/pasrel/modules/_index_.html) or the [examples](./examples/).
+For more information you can check the [docs](https://raftario.github.io/pasrel/modules/_index_.html) or the [examples](./examples/). You can also look at the [built-in filters](./src/filters/) for more complex usecases.
