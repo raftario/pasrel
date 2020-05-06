@@ -69,12 +69,16 @@
 				</a>
 				<p>A typed, composable and functional web server framework totally ripped off <a href="https://github.com/seanmonstar/warp">seanmonstar&#39;s warp</a></p>
 				<p><a href="https://github.com/raftario/pasrel/actions?query=workflow%3A%22Build+%26+Test%22"><img src="https://img.shields.io/github/workflow/status/raftario/pasrel/Build%20&%20Test?label=ci&style=flat-square" alt="CI"></a> <img src="https://img.shields.io/github/license/raftario/pasrel?style=flat-square" alt="License"> <a href="https://www.npmjs.com/package/pasrel"><img src="https://img.shields.io/npm/v/pasrel?style=flat-square" alt="npm"></a> <a href="https://raftario.github.io/pasrel/modules/_index_.html"><img src="https://img.shields.io/badge/docs-typedoc-informational?style=flat-square" alt="Documentation"></a></p>
-				<p><code>pasrel</code> is yet another Node.js web server framework. However, unlike most other frameworks, it doesn&#39;t use express-like route handlers or LoopBack-like controllers. The basic building blocks of <code>pasrel</code> are <code>Filter</code>s, small functions that can be combined in different ways to create routes, <del>totally ripped off</del> strongly inspired by <a href="https://github.com/seanmonstar/warp">warp</a>.</p>
+				<p><code>pasrel</code> is yet another Node.js web server framework. However, unlike most other frameworks, it doesn&#39;t use express-like route handlers or LoopBack-like controllers. The basic building blocks of the framework are <code>Filter</code>s, small functions that can be combined in different ways to create routes, <del>totally ripped off</del> strongly inspired by <a href="https://github.com/seanmonstar/warp">warp</a>.</p>
 				<p><code>pasrel</code> is fully written in TypeScript and leverages its powerful type system (with some help from <a href="https://github.com/pirix-gh/ts-toolbelt">ts-toolbelt</a>) to provide type safety and excellent editor support. It can be used with both TypeScript and JavaScript but TypeScript is highly recommended since filters can be hard to reason about and error prone without types.</p>
+				<a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
+					<h3>Disclaimer</h3>
+				</a>
+				<p>You shouldn&#39;t use <code>pasrel</code> in production, it hasn&#39;t been extensovely tested and, at this stage, is just a fun side project of mine to play around with various stuff.</p>
 				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
 					<h2>Features</h2>
 				</a>
-				<p>Out of the box, <code>pasrel</code> provides filters for</p>
+				<p>Out of the box, there are provided filters for</p>
 				<ul>
 					<li>Path routing and parameter extraction</li>
 					<li>Header requirement and extration</li>
@@ -102,7 +106,20 @@
     .map(<span class="hljs-keyword">async</span> (name) =&gt; reply.text(<span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span>));
 
 serve(hello).run(<span class="hljs-number">3030</span>).catch(<span class="hljs-built_in">console</span>.error);</code></pre>
-				<p>For more information you can check the <a href="https://raftario.github.io/pasrel/modules/_index_.html">docs</a> or the <a href="./examples/">examples</a>.</p>
+				<p>For more information you can check the <a href="https://raftario.github.io/pasrel/modules/_index_.html">docs</a> or the <a href="./examples/">examples</a>. You can also look at the <a href="./src/filters/">built-in filters</a> for more complex usecases.</p>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h2>Contributing</h2>
+				</a>
+				<p>All kinds of contributions are welcome ! Just try to keep dependencies to a minimum and write a couple tests. If you don&#39;t think a filter should be built-in but would still be useful for a couple people, you can also add it to the examples (examples are also not affected by the keep-dependencies-to-a-minimum rule).</p>
+				<p>Here are a couple useful commands for contributors</p>
+				<ul>
+					<li><code>yarn build</code> - Builds the main library</li>
+					<li><code>yarn build:examples</code> - Builds the examples</li>
+					<li><code>yarn test</code> - Runs the test suite</li>
+					<li><code>yarn lint:fix</code> - Runs the linters and automatically fixes errors that can be fixed</li>
+					<li><code>yarn lint:check</code> - Runs the linters and check for errors without fixing them</li>
+					<li><code>yarn doc</code> - Builds the documentation to the <a href="./docs/"><code>docs</code></a> directory</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
