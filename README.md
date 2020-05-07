@@ -47,7 +47,7 @@ const hello = path
 serve(hello).run(3030).catch(console.error);
 ```
 
-Now you can [get started](./GETTING-STARTED.md).
+Now you can [get started](./GETTING-STARTED.md) !
 
 For more information, you can check out the [examples](./examples) and [documentation](https://raftario.github.io/pasrel/modules/_index_.html), and look at the [built-in filters](./src/filters/) for more complex usecases.
 
