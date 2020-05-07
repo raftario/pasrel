@@ -8,6 +8,8 @@ A typed, composable and functional web server framework totally ripped off [sean
 
 `pasrel` is fully written in TypeScript and leverages its powerful type system (with some help from [ts-toolbelt](https://github.com/pirix-gh/ts-toolbelt)) to provide type safety and excellent editor support. It can be used with both TypeScript and JavaScript but TypeScript is highly recommended since filters can be hard to reason about and error prone without types.
 
+[Get started](./GETTING-STARTED.md).
+
 ### Disclaimer
 
 You shouldn't use `pasrel` in production, it hasn't been extensovely tested and, at this stage, is just a fun side project of mine to play around with various stuff.
@@ -45,7 +47,9 @@ const hello = path
 serve(hello).run(3030).catch(console.error);
 ```
 
-For more information you can check the [docs](https://raftario.github.io/pasrel/modules/_index_.html) or the [examples](./examples/). You can also look at the [built-in filters](./src/filters/) for more complex usecases.
+Now you can [get started](./GETTING-STARTED.md).
+
+For more information, you can check out the [examples](./examples) and [documentation](https://raftario.github.io/pasrel/modules/_index_.html), and look at the [built-in filters](./src/filters/) for more complex usecases.
 
 ## Contributing
 

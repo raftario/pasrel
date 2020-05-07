@@ -128,7 +128,11 @@ export class Filter<T extends Tuple> {
                 return await this.run(request, weight, depth);
             } catch (err) {
                 const f = await fn(err);
-                return await f.run(request, weight, depth);
+                if (f instanceof Filter) {
+                    return f.run(request, weight, depth);
+                } else {
+                    return { tuple: f, weight, depth };
+                }
             }
         });
     }
@@ -165,7 +169,7 @@ export type Map<T extends Tuple, U extends Tuple> = (
  *
  * @returns New filter
  */
-export type Recover<T extends Tuple> = (error: Error) => Promise<Filter<T>>;
+export type Recover<T extends Tuple> = (error: Error) => Promise<Filter<T> | T>;
 
 /**
  * Wrapping function used to wrap some functionality around a filter

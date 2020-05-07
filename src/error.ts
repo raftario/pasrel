@@ -4,7 +4,7 @@
  */
 
 import * as reply from "./reply";
-import { Recover, filter } from "./filter";
+import { Recover } from "./filter";
 import { Reply } from ".";
 
 /**
@@ -83,19 +83,16 @@ export function asReply(value: unknown): Reply | undefined {
 /**
  * Default recovery function used by the server internally
  *
- * This function transforms any [[`Error`]] into a [[`Reply`]]
+ * This function maps any [[`Error`]] to a [[`Reply`]]
  *
  * @param error - Error
  */
-export const recover: Recover<[Reply]> = async (error) =>
-    filter(
-        async (): Promise<[Reply]> => {
-            const r = asReply(error.error);
-            if (r !== undefined) {
-                return [r];
-            } else {
-                console.error(error);
-                return reply.status(500);
-            }
-        }
-    );
+export const recover: Recover<[Reply]> = async (error) => {
+    const r = asReply(error.error);
+    if (r !== undefined) {
+        return [r];
+    } else {
+        console.error(error);
+        return reply.status(500);
+    }
+};
