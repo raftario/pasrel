@@ -2,7 +2,6 @@ import * as path from "pasrel/filters/path";
 import * as reply from "pasrel/reply";
 import { serve } from "pasrel";
 
-// GET /hello/World => "Hello, World!"
 const hello = path
     .path("hello", String)
     .map(async (name) => reply.text(`Hello, ${name}!`));
