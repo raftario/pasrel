@@ -71,6 +71,7 @@
 				<p><a href="https://github.com/raftario/pasrel/actions?query=workflow%3A%22Build+%26+Test%22"><img src="https://img.shields.io/github/workflow/status/raftario/pasrel/Build%20&%20Test?label=ci&style=flat-square" alt="CI"></a> <img src="https://img.shields.io/github/license/raftario/pasrel?style=flat-square" alt="License"> <a href="https://www.npmjs.com/package/pasrel"><img src="https://img.shields.io/npm/v/pasrel?style=flat-square" alt="npm"></a> <a href="https://raftario.github.io/pasrel/modules/_index_.html"><img src="https://img.shields.io/badge/docs-typedoc-informational?style=flat-square" alt="Documentation"></a></p>
 				<p><code>pasrel</code> is yet another Node.js web server framework. However, unlike most other frameworks, it doesn&#39;t use express-like route handlers or LoopBack-like controllers. The basic building blocks of the framework are <code>Filter</code>s, small functions that can be combined in different ways to create routes, <del>totally ripped off</del> strongly inspired by <a href="https://github.com/seanmonstar/warp">warp</a>.</p>
 				<p><code>pasrel</code> is fully written in TypeScript and leverages its powerful type system (with some help from <a href="https://github.com/pirix-gh/ts-toolbelt">ts-toolbelt</a>) to provide type safety and excellent editor support. It can be used with both TypeScript and JavaScript but TypeScript is highly recommended since filters can be hard to reason about and error prone without types.</p>
+				<p><a href="./GETTING-STARTED.md">Get started</a>.</p>
 				<a href="#disclaimer" id="disclaimer" style="color: inherit; text-decoration: none;">
 					<h3>Disclaimer</h3>
 				</a>
@@ -106,7 +107,8 @@
     .map(<span class="hljs-keyword">async</span> (name) =&gt; reply.text(<span class="hljs-string">`Hello, <span class="hljs-subst">${name}</span>!`</span>));
 
 serve(hello).run(<span class="hljs-number">3030</span>).catch(<span class="hljs-built_in">console</span>.error);</code></pre>
-				<p>For more information you can check the <a href="https://raftario.github.io/pasrel/modules/_index_.html">docs</a> or the <a href="./examples/">examples</a>. You can also look at the <a href="./src/filters/">built-in filters</a> for more complex usecases.</p>
+				<p>Now you can <a href="./GETTING-STARTED.md">get started</a>.</p>
+				<p>For more information, you can check out the <a href="./examples">examples</a> and <a href="https://raftario.github.io/pasrel/modules/_index_.html">documentation</a>, and look at the <a href="./src/filters/">built-in filters</a> for more complex usecases.</p>
 				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
 					<h2>Contributing</h2>
 				</a>
