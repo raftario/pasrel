@@ -12,7 +12,7 @@ A typed, composable and functional web server framework totally ripped off [sean
 
 ### Disclaimer
 
-You shouldn't use `pasrel` in production, it hasn't been extensovely tested and, at this stage, is just a fun side project of mine to play around with various stuff.
+You shouldn't use `pasrel` in production, it hasn't been extensively tested and, at this stage, is just a fun pet project of mine to play around with various stuff.
 
 ## Features
 
