@@ -113,7 +113,7 @@
 					<div class="tsd-signature tsd-kind-icon">Path<wbr>Map&lt;S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FilterType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L100">src/filters/path.ts:100</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L100">src/filters/path.ts:100</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -134,7 +134,7 @@
 					<div class="tsd-signature tsd-kind-icon">Path<wbr>Segment<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">String</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">Boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L95">src/filters/path.ts:95</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L95">src/filters/path.ts:95</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -152,7 +152,7 @@
 					<div class="tsd-signature tsd-kind-icon">boolean<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, weight, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw asError(reply.status(404), weight);}if (request.pathSegments[depth] &#x3D;&#x3D;&#x3D; &quot;true&quot;) {return { tuple: [true as boolean], weight, depth: depth + 1 };} else if (request.pathSegments[depth] &#x3D;&#x3D;&#x3D; &quot;false&quot;) {return { tuple: [false as boolean], weight, depth: depth + 1 };} else {throw asError(reply.status(404), weight);}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L66">src/filters/path.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L66">src/filters/path.ts:66</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -167,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">end<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, weight, depth) &#x3D;&gt; {if (depth &#x3D;&#x3D; request.pathSegments.length) {return { tuple: [], weight: weight + 1, depth };} else {throw asError(reply.status(404), weight + 1);}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L84">src/filters/path.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L84">src/filters/path.ts:84</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,7 +182,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, weight, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw asError(reply.status(404), weight);}const n &#x3D; Number(request.pathSegments[depth]);if (Number.isNaN(n)) {throw asError(reply.status(404), weight);}return { tuple: [n], weight, depth: depth + 1 };})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L50">src/filters/path.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L50">src/filters/path.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -197,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">string<span class="tsd-signature-symbol">:</span> <a href="../classes/_filter_.filter.html" class="tsd-signature-type">Filter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Filter(async (request, weight, depth) &#x3D;&gt; {if (depth &gt;&#x3D; request.pathSegments.length) {throw asError(reply.status(404), weight);}return {tuple: [request.pathSegments[depth]],weight,depth: depth + 1,};})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L34">src/filters/path.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L34">src/filters/path.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -219,7 +219,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L122">src/filters/path.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L122">src/filters/path.ts:122</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -259,7 +259,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L156">src/filters/path.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L156">src/filters/path.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -302,7 +302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/d47f65f/src/filters/path.ts#L19">src/filters/path.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/raftario/pasrel/blob/9f3252e/src/filters/path.ts#L19">src/filters/path.ts:19</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
