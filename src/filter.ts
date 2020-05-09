@@ -108,7 +108,14 @@ export class Filter<T extends Tuple> {
     map<U extends Tuple>(fn: Map<T, U>): Filter<U> {
         return new Filter(async (request, weight, depth) => {
             const t = await this.run(request, weight, depth);
-            const f = await fn(...t.tuple);
+
+            let f: Filter<U> | U;
+            try {
+                f = await fn(...t.tuple);
+            } catch (err) {
+                throw asError(err, t.weight);
+            }
+
             if (f instanceof Filter) {
                 return f.run(request, t.weight, t.depth);
             } else {
@@ -127,7 +134,13 @@ export class Filter<T extends Tuple> {
             try {
                 return await this.run(request, weight, depth);
             } catch (err) {
-                const f = await fn(err);
+                let f: Filter<T> | T;
+                try {
+                    f = await fn(err);
+                } catch (err) {
+                    throw asError(err, weight);
+                }
+
                 if (f instanceof Filter) {
                     return f.run(request, weight, depth);
                 } else {
