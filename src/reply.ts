@@ -72,7 +72,7 @@ export function json(
         s = JSON.stringify(body, undefined, space);
     } catch (err) {
         console.error(err);
-        s = '{"error": "Internal Server Error"}';
+        s = '{"error":"Internal Server Error"}';
         status = 500;
     }
 

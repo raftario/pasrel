@@ -84,12 +84,99 @@ const product = path
     .map(async (n1, n2) => reply.text(`${n1} times ${n2} is ${n1 * n2}`));
 ```
 
+## Queries and request bodies
+
+Routing is nice, but another core feature of any web server is getting information from requests. That's where the query string and request body filters come into play. Let's say we have an endpoint that returns a large array where requests should indicate the max amount of elements to include in the response, and how many elements to skip.
+
+```ts
+import * as query from "pasrel/filters/query";
+
+const things = path
+    .path("things")
+    .and(method.get)
+    .and(query.query({ limit: Number, skip: Number }))
+    .map(async ({ limit, skip }) => {
+        const data = [0, 1, 2, 3];
+        return reply.json({
+            limit,
+            skip,
+            data: data.slice(skip, skip + limit),
+        });
+    });
+```
+
+Constructors, again. Here they're used to specify the schema the query string should follow. The query string will automatically be verified to make sure it follows the schema and given the appropriate type, and if it doesn't a 400 page describing the error will be sent to the user.
+
+What if the parameters shouldn't be required ? Easy.
+
+```ts
+import * as query from "pasrel/filters/query";
+
+const things = path
+    .path("things")
+    .and(method.get)
+    .and(
+        query.query({
+            limit: { optional: true, type: Number },
+            skip: { optional: true, type: Number },
+        })
+    )
+    .map(async ({ limit, skip }) => {
+        const data = [0, 1, 2, 3];
+
+        if (limit === undefined) {
+            limit = 100;
+        }
+        if (skip === undefined) {
+            skip = 0;
+        }
+
+        return reply.json({
+            limit,
+            skip,
+            data: data.slice(skip, skip + limit),
+        });
+    });
+```
+
+The schema gets a little verbose with optional parameters, but still much cleaner than writing all of the validation and casting code if you ask me.
+
+JSON bodies use a similar schema, except they can contain nested arrays and objects. Everything will be validated, and everything will be typed (you can use single elements array in the schema to represent infinite arrays of a givent type).
+
+```ts
+import * as body from "pasrel/filters/body";
+
+const todos = path
+    .path("todos")
+    .and(method.post)
+    .and(
+        body.json({
+            name: String,
+            description: { optional: true, type: String },
+            person: { firstname: String, lastname: String },
+            done: Boolean,
+        })
+    )
+    .map(async (todo) => {
+        const person = `${todo.person.firstname} ${todo.person.lastname}`;
+        const description =
+            todo.description === undefined ? "" : ` (${todo.description})`;
+        const done = todo.done ? "already done" : "not done yet";
+
+        return reply.text(
+            `${person} added a new todo: ${todo.name}${description}. It's ${done}.`
+        );
+    });
+```
+
+In the case of JSON the rather basic schema can quickly become quite limiting, so there's also an `anyJson` filter available that doesn't perform any validation and extracts `unknown` available for cases where more control is needed.
+
 ## Putting it all together
 
 As you can probably guess, or is especially useful for combining all the routes together into a single filter to pass to `serve`.
 
 ```ts
-const routes = hello.or(math);
+const routes = hello.or(math).or(things).or(todos);
 serve(routes).run(3030).catch(console.error);
 ```
 
@@ -98,10 +185,10 @@ Let's also add some logging to be able to quickly check that everything is worki
 ```ts
 import { logger } from "pasrel/filters/log";
 
-const routes = hello.or(math);
+const routes = hello.or(math).or(things).or(todos);
 
 console.log("Listening on port 3030");
 serve(routes, logger).run(3030).catch(console.error);
 ```
 
-Check out the [full code](./examples/getting-started.ts) with the other [examples](./examples/), or run it with `yarn example getting-started.ts`.
+Check out the [full code](./examples/getting-started.ts) with the other [examples](./examples/), or run it with `yarn example getting-started`.
