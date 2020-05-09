@@ -25,3 +25,9 @@ const routes = hello.or(math);
 
 console.log("Listening on port 3030");
 serve(routes, logger).run(3030).catch(console.error);
+
+/**
+ * GET /hello/:name
+ * GET /math/:n1/plus/:n2
+ * GET /math/:n1/times/:n2
+ */

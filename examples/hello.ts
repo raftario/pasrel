@@ -8,3 +8,7 @@ const hello = path
 
 console.log("Listening at http://localhost:3030");
 serve(hello).run(3030).catch(console.error);
+
+/**
+ * GET /hello/:name
+ */
