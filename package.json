@@ -28,7 +28,7 @@
     "dependencies": {
         "@types/node": "*",
         "busboy": "^0.3",
-        "get-stream": "^5",
+        "get-stream": "^6",
         "mime": "^2",
         "pump": "^3",
         "ts-toolbelt": "^6"
